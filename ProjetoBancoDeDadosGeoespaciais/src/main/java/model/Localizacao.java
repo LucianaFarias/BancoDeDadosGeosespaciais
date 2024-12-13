@@ -8,13 +8,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class Localizacao {
+	
+	private String id;
 	private String estado;
 	private String cidade;
 	private double latitude;
 	private double longitude;
 	private Point ponto;
 
-	public Localizacao(String estado, String cidade, double latitude, double longitude) {
+	public Localizacao(String id, String estado, String cidade, double latitude, double longitude) {
+		this.id = id;
 		this.estado = estado;
 		this.cidade = cidade;
 		this.latitude = latitude;
@@ -68,6 +71,14 @@ public class Localizacao {
 
 	public void setPonto(Point ponto) {
 		this.ponto = ponto;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

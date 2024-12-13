@@ -14,8 +14,9 @@ import dto.LocalizacaoDTO;
 
 public class BuscaCoordenadas {
 	// Cria a localização da cidade informada
-    public LocalizacaoDTO buscaLocalizacaoViaAPI(String cidade) throws Exception {
+    public LocalizacaoDTO buscaLocalizacaoViaAPI(LocalizacaoDTO localizacaoCidade) throws Exception {
 
+      String cidade = localizacaoCidade.getCidade();
       // Remove acentos, converte para minúsculo e troca espaços por hífens
       String cidadeFormatada = removerAcentos(cidade).toLowerCase().replaceAll(" ", "-");
 
