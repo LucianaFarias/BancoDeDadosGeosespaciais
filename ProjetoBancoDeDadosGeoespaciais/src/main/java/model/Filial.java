@@ -15,9 +15,20 @@ public class Filial {
     private int id;
 	@Column
     private String nome;
+
 	@Column(name="localizacao")
     private Localizacao endereco;
-	
+
+    public Filial(int id, String nome, Localizacao endereco) {
+        this.id = id;
+        this.nome = nome;
+        this.setEndereco(endereco);
+    }
+
+    public Filial() {
+
+    }
+
 	public int getId() {
     	return id; 
     }
