@@ -11,12 +11,14 @@ public class Pedido {
     private Localizacao localDeEntrega;
     private Localizacao origemDoPedido;
 
-    public Pedido(int id , List<ItemPedido> itens) {
-        this.id = id;
-        this.itens = itens;
-    }
+    public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido) {
+		this.id = id;
+		this.itens = itens;
+		this.localDeEntrega = localDeEntrega;
+		this.origemDoPedido = origemDoPedido;
+	}
 
-    public Pedido() {
+	public Pedido() {
     	
     };
     
