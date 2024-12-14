@@ -5,8 +5,8 @@ import java.util.List;
 public class Pedido {
     private int id;
     private List<ItemPedido> itens;
-    private Localizaçao localDeEntrega;
-    private Localizaçao origemDoPedido;
+    private Localizacao localDeEntrega;
+    private Localizacao origemDoPedido;
 
     public Pedido(int id , List<ItemPedido> itens) {
         this.id = id;
@@ -23,19 +23,19 @@ public class Pedido {
     	this.itens = itens; 
     	}
 
-	public Localizaçao getLocalDeEntrega() {
+	public Localizacao getLocalDeEntrega() {
 		return localDeEntrega;
 	}
 
-	public void setLocalDeEntrega(Localizaçao localDeEntrega) {
+	public void setLocalDeEntrega(Localizacao localDeEntrega) {
 		this.localDeEntrega = localDeEntrega;
 	}
 
-	public Localizaçao getOrigemDoPedido() {
+	public Localizacao getOrigemDoPedido() {
 		return origemDoPedido;
 	}
 
-	public void setOrigemDoPedido(Localizaçao origemDoPedido) {
+	public void setOrigemDoPedido(Localizacao origemDoPedido) {
 		this.origemDoPedido = origemDoPedido;
 	}
 }
