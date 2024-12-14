@@ -1,6 +1,9 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import dto.EstoqueDTO;
 
 public class Pedido {
     private int id;
@@ -8,11 +11,27 @@ public class Pedido {
     private Localizacao localDeEntrega;
     private Localizacao origemDoPedido;
 
-    public Pedido(int id , List<ItemPedido> itens) {
-        this.id = id;
-        this.itens = itens;
-    }
+    public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido) {
+		this.id = id;
+		this.itens = itens;
+		this.localDeEntrega = localDeEntrega;
+		this.origemDoPedido = origemDoPedido;
+	}
 
+	public Pedido() {
+    	
+    };
+    
+    // Gera uma lista com o que falta nos estoques para atender o pedido
+    // Se não faltar nada, retorna uma lista vazia
+    public List<EstoqueDTO> faltaEstoque(List<EstoqueDTO> estoques){
+        List<EstoqueDTO> resultado = new ArrayList<EstoqueDTO>();
+    	for(ItemPedido item : itens){
+           resultado.addAll(item.faltaEstoque(estoques));
+        }
+        return resultado;
+    }
+    
     public int getId() { 
     	return id; 
     	}
