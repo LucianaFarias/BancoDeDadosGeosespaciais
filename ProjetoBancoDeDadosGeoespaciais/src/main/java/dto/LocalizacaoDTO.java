@@ -3,7 +3,8 @@ package dto;
 import org.locationtech.jts.geom.Point;
 
 public class LocalizacaoDTO {
-
+	
+	private String id;
 	private String estado;
 	private String cidade;
 	private double latitude;
@@ -40,7 +41,14 @@ public class LocalizacaoDTO {
 	public void setPonto(Point ponto) {
 		this.ponto = ponto;
 	}
-	public LocalizacaoDTO(String estado, String cidade, double latitude, double longitude, Point ponto) {
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public LocalizacaoDTO(String id, String estado, String cidade, double latitude, double longitude, Point ponto) {
+		this.id = id;
 		this.estado = estado;
 		this.cidade = cidade;
 		this.latitude = latitude;

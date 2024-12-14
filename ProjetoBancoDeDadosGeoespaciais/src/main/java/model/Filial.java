@@ -3,16 +3,20 @@ package model;
 public class Filial {
     private int id;
     private String nome;
-    private Localizaçao endereco;
+    private Localizacao endereco;
     
 
-    public Filial(int id, String nome, String cidade, Localizaçao endereco) {
+    public Filial(int id, String nome, String cidade, Localizacao endereco) {
         this.id = id;
         this.nome = nome;
         this.setEndereco(endereco);
     }
 
-    public int getId() {
+    public Filial() {
+
+    }
+
+	public int getId() {
     	return id; 
     }
     public String getNome() { 
@@ -22,11 +26,11 @@ public class Filial {
     	this.nome = nome; 
     	}
 
-	public Localizaçao getEndereco() {
+	public Localizacao getEndereco() {
 		return endereco;
 	}
 
-	public void setEndereco(Localizaçao endereco) {
+	public void setEndereco(Localizacao endereco) {
 		this.endereco = endereco;
 	}
 	
