@@ -1,5 +1,10 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dto.EstoqueDTO;
+
 public class ItemPedido {
     private int id;
     private Produto produto;
@@ -9,6 +14,20 @@ public class ItemPedido {
         this.id = id;
         this.produto = produto;
         this.quantidade = quantidade;
+    }
+  
+    //Retorna a quantidade de cada produto que falta em vários estoques
+    public List<EstoqueDTO> faltaEstoque(List<EstoqueDTO> estoques){
+        List<EstoqueDTO> resultado = new ArrayList<EstoqueDTO>();
+    	for(EstoqueDTO estoqueDTO : estoques){
+            if((estoqueDTO.getProduto().getId() == produto.getId()) &&
+                estoqueDTO.getQuantidade()<quantidade){
+                EstoqueDTO estoqueQueFalta = estoqueDTO;
+                estoqueQueFalta.setQuantidade(quantidade - estoqueDTO.getQuantidade());
+                resultado.add(estoqueQueFalta);
+            }
+        }
+        return resultado;
     }
 
     public int getId() { 

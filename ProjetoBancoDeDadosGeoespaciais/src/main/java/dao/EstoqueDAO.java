@@ -16,6 +16,10 @@ public class EstoqueDAO implements IEstoqueDAO{
 
 	private EntityManagerFactory factory;
 	
+	public EstoqueDAO(EntityManagerFactory factory) {
+		this.factory = factory;
+	}
+
 	public List<EstoqueDTO> buscarEstoquesDaFilial(FilialDTO filial) throws Exception{
 		EntityManager em = factory.createEntityManager();
 
