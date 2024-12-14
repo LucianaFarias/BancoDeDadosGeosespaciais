@@ -1,18 +1,24 @@
 package model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+
+
+@Entity
 public class Filial {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+	@Column
     private String nome;
-    private Localizaçao endereco;
-    
-
-    public Filial(int id, String nome, String cidade, Localizaçao endereco) {
-        this.id = id;
-        this.nome = nome;
-        this.setEndereco(endereco);
-    }
-
-    public int getId() {
+	@Column(name="localizacao")
+    private Localizacao endereco;
+	
+	public int getId() {
     	return id; 
     }
     public String getNome() { 
@@ -22,14 +28,13 @@ public class Filial {
     	this.nome = nome; 
     	}
 
-	public Localizaçao getEndereco() {
+	public Localizacao getEndereco() {
 		return endereco;
 	}
 
-	public void setEndereco(Localizaçao endereco) {
+	public void setEndereco(Localizacao endereco) {
 		this.endereco = endereco;
 	}
-	
 	@Override
     public String toString() {
         return "Filial{" +
