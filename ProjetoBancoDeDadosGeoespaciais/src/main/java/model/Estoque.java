@@ -5,12 +5,14 @@ public class Estoque {
     private Produto produto;
     private int quantidade;
 
-    public Estoque(int id, Filial filial, Produto produto, int quantidade) {
+    public Estoque(Filial filial, Produto produto, int quantidade) {
         this.filial = filial;
         this.produto = produto;
         this.quantidade = quantidade;
     }
-    public Filial getFilial() { 
+    public Estoque() {
+	}
+	public Filial getFilial() { 
     	return filial; 
     	}
     public void setFilial(Filial filial) { 

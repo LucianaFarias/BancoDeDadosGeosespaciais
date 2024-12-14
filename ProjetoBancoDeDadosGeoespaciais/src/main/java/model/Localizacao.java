@@ -26,6 +26,10 @@ public class Localizacao {
 
 	}
 
+	public Localizacao(){
+		
+	}
+
 	public void criarPonto(double longitude, double latitude) {
 		GeometryFactory factory = new GeometryFactory();
 		Coordinate coordenada = new Coordinate(longitude, latitude);
