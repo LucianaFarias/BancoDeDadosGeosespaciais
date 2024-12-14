@@ -2,7 +2,7 @@ package model;
 
 public class Transferencia {
     private int id;
-    private Produto produto;
+	private Produto produto;
     private Filial origem;
     private Filial destino;
     private int quantidade;
@@ -14,10 +14,18 @@ public class Transferencia {
         this.destino = destino;
         this.quantidade = quantidade;
     }
+    
+    public Transferencia () {
+    	
+    }
 
     public int getId() { 
     	return id; 
     	}
+    public void setId(int id) {
+    	this.id = id;
+    	}
+    
     public Produto getProduto() { 
     	return produto; 
     	}
