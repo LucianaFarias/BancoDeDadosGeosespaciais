@@ -1,11 +1,13 @@
 package dto;
 
 public class EstoqueDTO {
+	private int id;
 	private FilialDTO filial;
     private ProdutoDTO produto;
     private int quantidade;
 
-    public EstoqueDTO(FilialDTO filial, ProdutoDTO produto, int quantidade) {
+    public EstoqueDTO(int id, FilialDTO filial, ProdutoDTO produto, int quantidade) {
+    	this.id = id;
         this.filial = filial;
         this.produto = produto;
         this.quantidade = quantidade;
@@ -30,4 +32,10 @@ public class EstoqueDTO {
     public void setQuantidade(int quantidade) { 
     	this.quantidade = quantidade; 
     	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 }

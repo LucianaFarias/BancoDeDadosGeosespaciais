@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,6 @@ import model.Filial;
 public class FilialDAO implements IFilialDao {
 	
     private EntityManagerFactory entityManagerFactory;
-    private MapperFilial mapper;
 
     public FilialDAO() {
         Conexao conexao = new Conexao();
@@ -77,4 +77,37 @@ public class FilialDAO implements IFilialDao {
 
 		    return null;
 		}
+
+	// Retorna a lista ordenada pela distância, das mais próximas para as mais distantes
+	@Override
+	public List<FilialDTO> buscarFiliaisProximas(FilialDTO filial) throws RuntimeException{
+		EntityManager em = entityManagerFactory.createEntityManager();
+
+        List<Filial> resultList;
+        try {
+            em.getTransaction().begin();
+            TypedQuery<Filial> query = em.createQuery(
+                    "SELECT f, ST_Distance(f.endereco.ponto, :filialOrigem) AS distance " +
+                    "FROM Filial f WHERE f.id != :filialId " +
+                    "ORDER BY distance", Filial.class);
+            query.setParameter("filialId", filial.getId());
+            query.setParameter("filialOrigem", filial.getEndereco().getPonto().toText());
+
+            resultList = query.getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException("Erro ao listar filiais: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+
+        List<FilialDTO> filiais = new ArrayList<>();
+        for (Filial filialEncontrada : resultList) {
+            FilialDTO filialDTO = MapperFilial.toDTO(filialEncontrada);
+            filiais.add(filialDTO);
+        }
+
+        return filiais;		
+	}
 }

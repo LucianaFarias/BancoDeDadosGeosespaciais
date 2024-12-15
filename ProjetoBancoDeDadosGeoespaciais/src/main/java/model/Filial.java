@@ -1,10 +1,17 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dto.EstoqueDTO;
+import dto.FilialDTO;
+import dto.TransferenciaDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import mappers.MapperEstoque;
 
 
 
@@ -28,6 +35,18 @@ public class Filial {
     public Filial() {
 
     }
+    
+    public List<TransferenciaDTO> gerarTranferencias(List<EstoqueDTO> estoquesTransferidos, FilialDTO destino){
+		List<TransferenciaDTO> transferencias = new ArrayList<>();
+		MapperEstoque mapperEstoque = new MapperEstoque();
+		
+		for(EstoqueDTO estoque: estoquesTransferidos) {
+			Estoque entidadeEstoque = mapperEstoque.toEntity(estoque);
+			TransferenciaDTO transferencia = entidadeEstoque.criarTransferencia(destino, estoque.getQuantidade());
+			transferencias.add(transferencia);
+		}
+		return transferencias;
+	}
 
 	public int getId() {
     	return id; 
