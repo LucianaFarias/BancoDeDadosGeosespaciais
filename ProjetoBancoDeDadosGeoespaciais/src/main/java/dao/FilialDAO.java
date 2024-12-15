@@ -87,7 +87,7 @@ public class FilialDAO implements IFilialDao {
         try {
             em.getTransaction().begin();
             TypedQuery<Filial> query = em.createQuery(
-                    "SELECT f, ST_Distance(f.location, :filialOrigem) AS distance " +
+                    "SELECT f, ST_Distance(f.endereco.ponto, :filialOrigem) AS distance " +
                     "FROM Filial f WHERE f.id != :filialId " +
                     "ORDER BY distance", Filial.class);
             query.setParameter("filialId", filial.getId());
