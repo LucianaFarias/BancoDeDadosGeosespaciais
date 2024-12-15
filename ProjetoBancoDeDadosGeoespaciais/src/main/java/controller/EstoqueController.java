@@ -3,6 +3,9 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.Conexao;
+import dao.EstoqueDAO;
+import dao.FilialDAO;
 import dao.IEstoqueDAO;
 import dao.IFilialDao;
 import dto.EstoqueDTO;
@@ -16,9 +19,17 @@ import model.Pedido;
 
 public class EstoqueController {
 	
+	private Conexao conexao;
 	private IEstoqueDAO estoqueDAO;
 	private IFilialDao filialDAO;
 	private MapperEstoque mapperEstoque;
+	
+	public EstoqueController() {
+		this.conexao = new Conexao();
+		this.estoqueDAO = new EstoqueDAO(conexao.criarConexao());
+		this.filialDAO = new FilialDAO();
+		this.mapperEstoque = new MapperEstoque();
+	}
 
 	public List<TransferenciaDTO> necessitaTransferenciaDeEstoque(FilialDTO filial, PedidoDTO pedido) throws Exception {
 		List<TransferenciaDTO> transferenciasNecessarias = new ArrayList<>();
@@ -33,7 +44,7 @@ public class EstoqueController {
 					for (EstoqueDTO estoque : estoquesNaFilial) {
 						TransferenciaDTO transferencia = mapperEstoque.toEntity(estoque).criarTransferencia(filial, estoque.getQuantidade());
 						transferenciasNecessarias.add(transferencia);
-						estoquesQueFaltam = atualizarEstoques(estoquesQueFaltam, transferenciasNecessarias);
+						estoquesQueFaltam = atualizarQuantidadeEstoques(estoquesQueFaltam, transferenciasNecessarias);
 					}
 					if(estoquesQueFaltam.isEmpty()) {
 						return transferenciasNecessarias;
@@ -95,7 +106,7 @@ public class EstoqueController {
 		return estoquesDaFilial;
 	}	
 	
-	public List<EstoqueDTO> atualizarEstoques(List<EstoqueDTO> estoques, List<TransferenciaDTO> transferencias) throws EstoqueInsuficienteException{
+	public List<EstoqueDTO> atualizarQuantidadeEstoques(List<EstoqueDTO> estoques, List<TransferenciaDTO> transferencias) throws EstoqueInsuficienteException{
 		for(EstoqueDTO estoque: estoques) {
 			estoque = mapperEstoque.toEntity(estoque).atualizarEstoque(transferencias);
 			if(estoque.getQuantidade() == 0) {
@@ -104,5 +115,33 @@ public class EstoqueController {
 		}
 		return estoques;
 		
+	}
+	
+	public void atualizarEstoque(EstoqueDTO estoque) throws Exception {
+		estoqueDAO.atualizarEstoque(estoque);
+	}
+
+	public IEstoqueDAO getEstoqueDAO() {
+		return estoqueDAO;
+	}
+
+	public void setEstoqueDAO(IEstoqueDAO estoqueDAO) {
+		this.estoqueDAO = estoqueDAO;
+	}
+
+	public IFilialDao getFilialDAO() {
+		return filialDAO;
+	}
+
+	public void setFilialDAO(IFilialDao filialDAO) {
+		this.filialDAO = filialDAO;
+	}
+
+	public MapperEstoque getMapperEstoque() {
+		return mapperEstoque;
+	}
+
+	public void setMapperEstoque(MapperEstoque mapperEstoque) {
+		this.mapperEstoque = mapperEstoque;
 	}
 }

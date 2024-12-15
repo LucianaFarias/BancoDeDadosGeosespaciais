@@ -15,9 +15,11 @@ import model.Estoque;
 public class EstoqueDAO implements IEstoqueDAO{
 
 	private EntityManagerFactory factory;
+	private MapperEstoque mapper;
 	
 	public EstoqueDAO(EntityManagerFactory factory) {
 		this.factory = factory;
+		this.mapper = new MapperEstoque();
 	}
 
 	public List<EstoqueDTO> buscarEstoquesDaFilial(FilialDTO filial) throws Exception{
@@ -40,7 +42,6 @@ public class EstoqueDAO implements IEstoqueDAO{
 		}
 		
 		List<EstoqueDTO> estoques = new ArrayList<>();
-		MapperEstoque mapper = new MapperEstoque();
 		for(Estoque estoque: resultList) {
 			estoques.add(mapper.toDTO(estoque));
 		}
@@ -69,7 +70,6 @@ public class EstoqueDAO implements IEstoqueDAO{
 	    }
 
 	    List<EstoqueDTO> estoques = new ArrayList<>();
-	    MapperEstoque mapper = new MapperEstoque();
 	    for (Estoque estoque : resultList) {
 	        estoques.add(mapper.toDTO(estoque));
 	    }
@@ -77,6 +77,22 @@ public class EstoqueDAO implements IEstoqueDAO{
 	    return estoques;
 	}
 
+	public void atualizarEstoque(EstoqueDTO estoque) throws Exception {
+		EntityManager entityManager = factory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			Estoque estoqueEncontrado = entityManager.find(Estoque.class, estoque.getId());
+			estoqueEncontrado = mapper.toEntity(estoque);
+			entityManager.merge(estoqueEncontrado);
+	        entityManager.getTransaction().commit();
+		}catch(Exception e) {
+			entityManager.getTransaction().rollback();
+			throw e;
+		}finally {
+			entityManager.close();
+		}
+	}
+	
 	public EntityManagerFactory getFactory() {
 		return factory;
 	}
@@ -84,5 +100,6 @@ public class EstoqueDAO implements IEstoqueDAO{
 	public void setFactory(EntityManagerFactory factory) {
 		this.factory = factory;
 	}
+
 
 }
