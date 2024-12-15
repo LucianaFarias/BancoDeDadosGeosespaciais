@@ -1,12 +1,25 @@
 package model;
 
-public class Filial {
-    private int id;
-    private String nome;
-    private Localizacao endereco;
-    
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-    public Filial(int id, String nome, String cidade, Localizacao endereco) {
+
+
+@Entity
+public class Filial {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+	@Column
+    private String nome;
+
+	@Column(name="localizacao")
+    private Localizacao endereco;
+
+    public Filial(int id, String nome, Localizacao endereco) {
         this.id = id;
         this.nome = nome;
         this.setEndereco(endereco);
@@ -33,7 +46,6 @@ public class Filial {
 	public void setEndereco(Localizacao endereco) {
 		this.endereco = endereco;
 	}
-	
 	@Override
     public String toString() {
         return "Filial{" +
