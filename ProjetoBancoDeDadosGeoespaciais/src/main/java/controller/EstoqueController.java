@@ -14,6 +14,15 @@ public class EstoqueController {
 	
 	private EstoqueDAO estoqueDAO;
 
+	public void atenderPedido(FilialDTO filial, PedidoDTO pedido) {
+		List<EstoqueDTO> estoquesQueFaltam = verificarSeFaltaEstoque(filial, pedido);
+		if(estoquesQueFaltam.size()>0) {
+			
+		}else {
+			//retorna lista vaizia de transferencias
+		}
+	}
+	
 	// Se o estoque for suficiente, a lista será vazia
 	public List<EstoqueDTO> verificarSeFaltaEstoque(FilialDTO filial, PedidoDTO pedido) {
 		List<EstoqueDTO> estoques;
