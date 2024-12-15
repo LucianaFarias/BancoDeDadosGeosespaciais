@@ -1,10 +1,13 @@
 package model;
 
+import java.util.List;
+
 import dto.EstoqueDTO;
 import dto.FilialDTO;
 import dto.TransferenciaDTO;
 import exception.EstoqueInsuficienteException;
 import mapper.MapperFilial;
+import mappers.MapperEstoque;
 import mappers.MapperProduto;
 
 public class Estoque {
@@ -37,6 +40,20 @@ public class Estoque {
     	}else {
     		throw new EstoqueInsuficienteException();
     	}
+    }
+    
+    public EstoqueDTO atualizarEstoque(List<TransferenciaDTO> transferencias) throws EstoqueInsuficienteException {
+    	
+    	for(TransferenciaDTO transferencia: transferencias) {
+    		if(transferencia.getDestino().getId() == filial.getId() &&
+    			transferencia.getProduto().getId() == produto.getId()) {
+    			remover(transferencia.getQuantidade());
+    		}
+    	}
+    	MapperEstoque mapperEstoque = new MapperEstoque();
+    	EstoqueDTO estoqueAtualizado = mapperEstoque.toDTO(this);
+    	return estoqueAtualizado;
+    	
     }
     
 	public Filial getFilial() { 
