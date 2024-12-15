@@ -11,16 +11,19 @@ import mappers.MapperEstoque;
 import mappers.MapperProduto;
 
 public class Estoque {
+	private int id;
     private Filial filial;
     private Produto produto;
     private int quantidade;
+   
+    public Estoque(int id, Filial filial, Produto produto, int quantidade) {
+		this.id = id;
+		this.filial = filial;
+		this.produto = produto;
+		this.quantidade = quantidade;
+	}
 
-    public Estoque(Filial filial, Produto produto, int quantidade) {
-        this.filial = filial;
-        this.produto = produto;
-        this.quantidade = quantidade;
-    }
-    public Estoque() {
+	public Estoque() {
 	}
     
     public TransferenciaDTO criarTransferencia(FilialDTO destino, int quantidadeTransferida) {
@@ -74,4 +77,10 @@ public class Estoque {
     public void setQuantidade(int quantidade) { 
     	this.quantidade = quantidade; 
     	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 }
