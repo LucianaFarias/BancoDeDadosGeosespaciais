@@ -27,7 +27,7 @@ public class EstoqueDAO implements IEstoqueDAO{
 		try {
 			em.getTransaction().begin();
 			TypedQuery<Estoque> query = em.createQuery(
-					"SELECT e FROM Estoque e WHERE e.filial.id = :filialId", Estoque.class);
+					"SELECT e FROM Estoque e WHERE e.filial.id = :filialId AND e.quantidade > 0", Estoque.class);
 			query.setParameter("filialId", filial.getId());
 
 			resultList = query.getResultList();
@@ -56,7 +56,7 @@ public class EstoqueDAO implements IEstoqueDAO{
 	    try {
 	        em.getTransaction().begin();
 	        TypedQuery<Estoque> query = em.createQuery(
-	                "SELECT e FROM Estoque e WHERE e.produto.id = :produtoId", Estoque.class);
+	                "SELECT e FROM Estoque e WHERE e.produto.id = :produtoId AND e.quantidade > 0", Estoque.class);
 	        query.setParameter("produtoId", produto.getId());
 
 	        resultList = query.getResultList();
