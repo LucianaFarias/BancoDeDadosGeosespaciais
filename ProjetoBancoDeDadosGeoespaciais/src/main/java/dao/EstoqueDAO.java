@@ -78,19 +78,19 @@ public class EstoqueDAO implements IEstoqueDAO{
 	}
 
 	public void atualizarEstoque(EstoqueDTO estoque) throws Exception {
-		EntityManager entityManager = factory.createEntityManager();
-		try {
-			entityManager.getTransaction().begin();
-			Estoque estoqueEncontrado = entityManager.find(Estoque.class, estoque.getId());
-			estoqueEncontrado = mapper.toEntity(estoque);
-			entityManager.merge(estoqueEncontrado);
+	    EntityManager entityManager = factory.createEntityManager();
+	    try {
+	        entityManager.getTransaction().begin();
+	        Estoque estoqueEncontrado = entityManager.find(Estoque.class, estoque.getId());
+	        estoqueEncontrado = mapper.toEntity(estoque);
+	        entityManager.merge(estoqueEncontrado);
 	        entityManager.getTransaction().commit();
-		}catch(Exception e) {
-			entityManager.getTransaction().rollback();
-			throw e;
-		}finally {
-			entityManager.close();
-		}
+	    } catch (Exception e) {
+	        entityManager.getTransaction().rollback();
+	        throw e;
+	    } finally {
+	        entityManager.close();
+	    }
 	}
 	
 	public EntityManagerFactory getFactory() {
