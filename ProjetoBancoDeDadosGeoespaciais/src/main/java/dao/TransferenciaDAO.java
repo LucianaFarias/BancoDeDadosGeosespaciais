@@ -16,6 +16,10 @@ public class TransferenciaDAO implements ITransferenciaDAO {
 
     private EntityManagerFactory factory;
     
+    public TransferenciaDAO() {
+    	this.factory = Conexao.getInstancia().getFactory();
+    }
+    
     public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
     	EntityManager em = factory.createEntityManager();
     	MapperTransferencia mapper = new MapperTransferencia();
@@ -35,7 +39,7 @@ public class TransferenciaDAO implements ITransferenciaDAO {
     public void registrarChegadaEstoque(TransferenciaDTO dto) throws Exception {
         EntityManager entityManager = factory.createEntityManager();
         MapperTransferencia mapper = new MapperTransferencia();
-        EstoqueDAO estoqueDAO = new EstoqueDAO(factory);
+        EstoqueDAO estoqueDAO = new EstoqueDAO();
 
         try {
             entityManager.getTransaction().begin();
