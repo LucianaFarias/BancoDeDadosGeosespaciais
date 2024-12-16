@@ -41,7 +41,7 @@ public class Estoque {
     	if(this.quantidade >= quantidade) {
     		this.quantidade = getQuantidade()-quantidade;
     	}else {
-    		throw new EstoqueInsuficienteException();
+    		throw new EstoqueInsuficienteException("Estoque insuficiente");
     	}
     }
     
