@@ -1,5 +1,7 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -7,10 +9,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+
 import dto.LocalizacaoDTO;
+import main.JsonNode;
+import main.ObjectMapper;
 
 public class BuscaCoordenadas {
 	// Cria a localização da cidade informada
@@ -125,5 +135,48 @@ public class BuscaCoordenadas {
         textoEncontrado = matcher.group(); //Primeira ocorrência encontrada
       }
       return textoEncontrado;
+    }
+    
+    public void consumoAPIemJson() {
+    	try {
+            // Caminho para o arquivo GeoJSON
+            File geoJsonFile = new File("C:\\Users\\Carina\\Documents\\ADS\\bd2\\banco-geoespacial\\projeto\\BancoDeDadosGeosespaciais\\dados-json.txt");
+            FileInputStream fis = new FileInputStream(geoJsonFile);
+            // Ler o GeoJSON como um nó JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(fis);
+
+            // Exibir o conteúdo
+            //System.out.println("Tipo: " + rootNode.findParents("geometry"));
+            //System.out.println("Features: " + rootNode.get("features"));
+
+            GeometryFactory geometryFactory = new GeometryFactory();
+            List<Coordinate> coord = new ArrayList<>();
+            List<LineString> linhas = new ArrayList<>();
+            // Iterar pelas features
+            
+            //GeometryDTO dto = objectMapper.readValue(rootNode.findPath("geometry").binaryValue(), GeometryDTO.class);
+            	
+            for(JsonNode coordenadas: rootNode.findValues("geometry")){
+            	for(JsonNode node: coordenadas) {
+	            	double latitude = node.get("lat").asDouble();
+	            	double longitude = node.get("lon").asDouble();
+	            	coord.add(new Coordinate(longitude, latitude));
+            	
+            	}
+            		
+            	linhas.add(geometryFactory.createLineString(coord.toArray(new Coordinate[coord.size()])));
+            }
+    
+            	
+            	
+            //}
+            
+            //geometryFactory.createMultiLineString(null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    	
     }
 }
