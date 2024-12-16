@@ -4,9 +4,6 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class Localizacao {
 	
 	private String id;
@@ -79,10 +76,6 @@ public class Localizacao {
 
 	public String getId() {
 		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 }

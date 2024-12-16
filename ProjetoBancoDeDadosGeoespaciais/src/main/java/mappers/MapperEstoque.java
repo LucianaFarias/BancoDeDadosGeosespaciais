@@ -15,6 +15,7 @@ public class MapperEstoque {
 
     public EstoqueDTO toDTO(Estoque estoque) {
         EstoqueDTO dto = new EstoqueDTO();
+        dto.setId(estoque.getId());
         dto.setQuantidade(estoque.getQuantidade());
         dto.setProduto(mapperProduto.toDTO(estoque.getProduto()));
         dto.setFilial(mapperFilial.toDTO(estoque.getFilial()));
@@ -23,6 +24,7 @@ public class MapperEstoque {
 
     public Estoque toEntity(EstoqueDTO estoque) {
         Estoque entity = new Estoque();
+        entity.setId(estoque.getId());
         entity.setQuantidade(estoque.getQuantidade());
         entity.setProduto(mapperProduto.toEntity(estoque.getProduto()));
         entity.setFilial(mapperFilial.toEntity(estoque.getFilial()));

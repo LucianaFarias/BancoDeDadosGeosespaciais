@@ -11,18 +11,6 @@ public class LocalizacaoDTO {
 	private double longitude;
 	private Point ponto;
 
-	public String getEstado() {
-		return estado;
-	}
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-	public String getCidade() {
-		return cidade;
-	}
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
 	public double getLatitude() {
 		return latitude;
 	}
@@ -34,6 +22,18 @@ public class LocalizacaoDTO {
 	}
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	public String getEstado() {
+		return estado;
+	}
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+	public String getCidade() {
+		return cidade;
+	}
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
 	}
 	public Point getPonto() {
 		return ponto;
@@ -58,4 +58,5 @@ public class LocalizacaoDTO {
 
 	public LocalizacaoDTO() {
 	}
+
 }
