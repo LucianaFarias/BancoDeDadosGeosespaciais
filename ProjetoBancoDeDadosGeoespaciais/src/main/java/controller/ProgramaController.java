@@ -2,7 +2,7 @@ package controller;
 
 import dao.Conexao;
 
-public class ControllerPrograma {
+public class ProgramaController {
 	
 	//Fecha a EntityManagerFactory e encerra o programa
 	public void encerrar() {
