@@ -14,7 +14,11 @@ public class TransferenciaDAO {
 
     private EntityManagerFactory factory;
     
-    public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
+    public TransferenciaDAO(EntityManagerFactory entityManagerFactory) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
     	EntityManager em = factory.createEntityManager();
     	MapperTransferencia mapper = new MapperTransferencia();
     	try {
@@ -54,5 +58,28 @@ public class TransferenciaDAO {
             transferencias.add(mapper.toDTO(transferencia));
         }
         return transferencias;
+    }
+    public List<TransferenciaDTO> ListarTransferenciaPorFilial(TransferenciaDTO dto) {
+        List<TransferenciaDTO> transferencias = null;
+		try {
+			transferencias = buscarTransferenciasPorFilial(dto.getOrigem());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			transferencias = buscarTransferenciasPorFilial(dto.getOrigem());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        List<TransferenciaDTO> result = new ArrayList<>();
+
+        for (TransferenciaDTO transferenciaDTO : transferencias) {
+            if (transferenciaDTO.getOrigem().equals(dto.getOrigem())) {
+                result.add(transferenciaDTO);
+            }
+        }
+        return result;
     }
 }
