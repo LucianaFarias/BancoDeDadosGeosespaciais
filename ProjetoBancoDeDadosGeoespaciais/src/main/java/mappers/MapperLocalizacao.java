@@ -17,13 +17,13 @@ public class MapperLocalizacao {
     }
 
     public Localizacao toEntity(LocalizacaoDTO localizacao) {
-        Localizacao entity = new Localizacao();
-        entity.setId(localizacao.getId());
-        entity.setCidade(localizacao.getCidade());
-        entity.setEstado(localizacao.getEstado());
-        entity.setLatitude(localizacao.getLatitude());
-        entity.setLongitude(localizacao.getLongitude());
-        entity.setPonto(localizacao.getPonto());
+        Localizacao entity = new Localizacao(
+        		localizacao.getId(),
+        		localizacao.getCidade(),
+        		localizacao.getEstado(),
+        		localizacao.getLatitude(),
+        		localizacao.getLongitude());
+        
         return entity;    
     }
 

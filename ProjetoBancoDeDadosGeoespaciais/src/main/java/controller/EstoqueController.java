@@ -52,6 +52,9 @@ public class EstoqueController {
 				}
 
 			}
+			if(!estoquesQueFaltam.isEmpty()) {
+				throw new EstoqueInsuficienteException("Não há estoque suficiente nas filiais");
+			}
 			
 		}
 		return transferenciasNecessarias;
