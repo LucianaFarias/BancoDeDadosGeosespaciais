@@ -15,7 +15,9 @@ import model.Transferencia;
 public class TransferenciaDAO implements ITransferenciaDAO {
 
     private EntityManagerFactory factory;
-    
+  
+	public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
+
     public TransferenciaDAO() {
     	this.factory = Conexao.getInstancia().getFactory();
     }
@@ -97,5 +99,28 @@ public class TransferenciaDAO implements ITransferenciaDAO {
             transferencias.add(mapper.toDTO(transferencia));
         }
         return transferencias;
+    }
+    public List<TransferenciaDTO> ListarTransferenciaPorFilial(TransferenciaDTO dto) {
+        List<TransferenciaDTO> transferencias = null;
+		try {
+			transferencias = buscarTransferenciasPorFilial(dto.getOrigem());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			transferencias = buscarTransferenciasPorFilial(dto.getOrigem());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        List<TransferenciaDTO> result = new ArrayList<>();
+
+        for (TransferenciaDTO transferenciaDTO : transferencias) {
+            if (transferenciaDTO.getOrigem().equals(dto.getOrigem())) {
+                result.add(transferenciaDTO);
+            }
+        }
+        return result;
     }
 }
