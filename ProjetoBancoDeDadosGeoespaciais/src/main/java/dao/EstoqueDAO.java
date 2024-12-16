@@ -17,8 +17,8 @@ public class EstoqueDAO implements IEstoqueDAO{
 	private EntityManagerFactory factory;
 	private MapperEstoque mapper;
 	
-	public EstoqueDAO(EntityManagerFactory factory) {
-		this.factory = factory;
+	public EstoqueDAO() {
+		this.factory = Conexao.getInstancia().getFactory();
 		this.mapper = new MapperEstoque();
 	}
 
