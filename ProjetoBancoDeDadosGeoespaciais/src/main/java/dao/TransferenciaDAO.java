@@ -16,8 +16,6 @@ public class TransferenciaDAO implements ITransferenciaDAO {
 
     private EntityManagerFactory factory;
   
-	public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
-
     public TransferenciaDAO() {
     	this.factory = Conexao.getInstancia().getFactory();
     }
