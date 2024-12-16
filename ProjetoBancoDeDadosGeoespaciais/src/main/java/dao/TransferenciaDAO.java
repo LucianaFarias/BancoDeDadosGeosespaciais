@@ -6,19 +6,23 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import mappers.MapperTransferencia;
+import dto.EstoqueDTO;
 import dto.FilialDTO;
+import dto.ProdutoDTO;
 import dto.TransferenciaDTO;
 import model.Transferencia;
 
-public class TransferenciaDAO {
+public class TransferenciaDAO implements ITransferenciaDAO {
 
     private EntityManagerFactory factory;
-    
-    public TransferenciaDAO(EntityManagerFactory entityManagerFactory) {
-		// TODO Auto-generated constructor stub
-	}
-
+  
 	public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
+
+    public TransferenciaDAO() {
+    	this.factory = Conexao.getInstancia().getFactory();
+    }
+    
+    public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
     	EntityManager em = factory.createEntityManager();
     	MapperTransferencia mapper = new MapperTransferencia();
     	try {
@@ -32,6 +36,43 @@ public class TransferenciaDAO {
     	} finally {
     		em.close();
     	}
+    }
+    
+    public void registrarChegadaEstoque(TransferenciaDTO dto) throws Exception {
+        EntityManager entityManager = factory.createEntityManager();
+        MapperTransferencia mapper = new MapperTransferencia();
+        EstoqueDAO estoqueDAO = new EstoqueDAO();
+
+        try {
+            entityManager.getTransaction().begin();
+
+            // Converter e registrar a transferência como concluída
+            Transferencia transferencia = mapper.toEntity(dto);
+            transferencia.setConcluida(true);
+            entityManager.merge(transferencia);
+
+            // Obter o produto e a quantidade da transferência
+            ProdutoDTO produto = dto.getProduto();
+            int quantidade = dto.getQuantidade();
+
+            // Buscar o estoque da filial de destino
+            EstoqueDTO estoqueDestino = estoqueDAO.buscarEstoquesDaFilial(dto.getDestino()).stream()
+                .filter(estoque -> estoque.getProduto().getId() == produto.getId())
+                .findFirst()
+                .orElseThrow(() -> new Exception("Produto não encontrado na filial de destino"));
+
+            // Atualizar o estoque da filial de destino com a quantidade transferida
+            estoqueDestino.setQuantidade(estoqueDestino.getQuantidade() + quantidade);
+            estoqueDAO.atualizarEstoque(estoqueDestino);
+
+            // Commit da transação
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<TransferenciaDTO> buscarTransferenciasPorFilial(FilialDTO dto) throws Exception {
