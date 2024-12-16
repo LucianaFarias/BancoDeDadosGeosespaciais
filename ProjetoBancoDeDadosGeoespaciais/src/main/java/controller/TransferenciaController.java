@@ -20,6 +20,10 @@ import dto.ProdutoDTO;
 public class TransferenciaController {
 
     private TransferenciaDAO dao;
+    
+    public TransferenciaController() {
+    	this.dao = new TransferenciaDAO();
+    }
 
     public List<TransferenciaDTO> listarTransferenciasPorFilial(FilialDTO dto) throws Exception {
         return dao.buscarTransferenciasPorFilial(dto);      		      		
