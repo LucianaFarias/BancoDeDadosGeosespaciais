@@ -25,8 +25,7 @@ public class EstoqueController {
 	private MapperEstoque mapperEstoque;
 	
 	public EstoqueController() {
-		this.conexao = new Conexao();
-		this.estoqueDAO = new EstoqueDAO(conexao.criarConexao());
+		this.estoqueDAO = new EstoqueDAO();
 		this.filialDAO = new FilialDAO();
 		this.mapperEstoque = new MapperEstoque();
 	}

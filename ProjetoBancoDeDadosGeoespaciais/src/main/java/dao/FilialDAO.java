@@ -17,8 +17,7 @@ public class FilialDAO implements IFilialDao {
     private EntityManagerFactory entityManagerFactory;
 
     public FilialDAO() {
-        Conexao conexao = new Conexao();
-        this.entityManagerFactory = conexao.criarConexao();
+        this.entityManagerFactory = Conexao.getInstancia().getFactory();
     }
 	
 	@Override
@@ -59,7 +58,7 @@ public class FilialDAO implements IFilialDao {
 
 	@Override
 	public FilialDTO buscarFilialPorId(FilialDTO dto) throws FilialInvalidaException {
-		if (dto == null || dto.getId() == 0) {
+		if (dto == null) {
 			throw new FilialInvalidaException();
 		    }
 
