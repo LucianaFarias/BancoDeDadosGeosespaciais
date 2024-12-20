@@ -3,13 +3,11 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.EstoqueDTO;
 import dto.PedidoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import mappers.MapperPedido;
-import model.Estoque;
 import model.Pedido;
 
 public class PedidoDAO implements IPedidoDAO{
@@ -23,7 +21,7 @@ public class PedidoDAO implements IPedidoDAO{
 	}
 
 	@Override
-	public List<PedidoDTO> listarPedidos() {
+	public List<PedidoDTO> listarPedidos() throws Exception{
 		EntityManager em = entityManagerFactory.createEntityManager();
 
 		List<Pedido> resultList;
