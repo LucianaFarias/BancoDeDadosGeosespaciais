@@ -7,6 +7,8 @@ public class Transferencia {
 	private Filial destino;
 	private int quantidade;
 	private boolean concluida;
+	private boolean cancelada;
+
 
 	public Transferencia(int id, Produto produto, Filial origem, Filial destino, int quantidade) {
 		this.id = id;
@@ -25,7 +27,6 @@ public class Transferencia {
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public Produto getProduto() { 
 		return produto; 
 	}
@@ -50,11 +51,17 @@ public class Transferencia {
 	public void setQuantidade(int quantidade) { 
 		this.quantidade = quantidade; 
 	}
-
 	public boolean isConcluida() { 
 		return concluida; 
 	}
 	public void setConcluida(boolean concluida) { 
 		this.concluida = concluida; 
+	}
+	public boolean isCancelada() {
+		return cancelada;
+	}
+
+	public void setCancelada(boolean cancelada) {
+		this.cancelada = cancelada;
 	}	
 }
