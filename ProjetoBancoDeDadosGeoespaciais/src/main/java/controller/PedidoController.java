@@ -17,6 +17,10 @@ public class PedidoController {
 	public List<PedidoDTO> listarPedidos() throws Exception{
 		return pedidoDAO.listarPedidos();
 	}
+	
+	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {
+		return pedidoDAO.buscarPedidoPorId(pedido);
+	}
 
 	public IPedidoDAO getPedidoDAO() {
 		return pedidoDAO;

@@ -3,11 +3,13 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.EstoqueDTO;
 import dto.PedidoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 import mappers.MapperPedido;
+import model.Estoque;
 import model.Pedido;
 
 public class PedidoDAO implements IPedidoDAO{
@@ -44,6 +46,25 @@ public class PedidoDAO implements IPedidoDAO{
 			pedidos.add(mapper.toDTO(pedido));
 		}
 		return pedidos;
+	}
+
+	public void atualizarEstoque(EstoqueDTO estoque) throws Exception {
+	}
+	@Override
+	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			Pedido pedidoEncontrado = entityManager.find(Pedido.class, pedido.getId());
+			pedido = mapper.toDTO(pedidoEncontrado);
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			entityManager.getTransaction().rollback();
+			throw e;
+		} finally {
+			entityManager.close();
+		}
+		return null;
 	}
 
 }
