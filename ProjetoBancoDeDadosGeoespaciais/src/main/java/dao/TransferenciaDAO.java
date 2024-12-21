@@ -52,6 +52,28 @@ public class TransferenciaDAO implements ITransferenciaDAO {
             em.close();
         }
     }
+    
+    public void cancelarTransferencia(TransferenciaDTO dto) throws Exception {
+        EntityManager em = factory.createEntityManager();
+        MapperTransferencia mapper = new MapperTransferencia();
+        try {
+        	em.getTransaction().begin();
+
+            // Atualizar transferência como cancelada
+            Transferencia transferencia = mapper.toEntity(dto);
+            transferencia.setCancelada(true);
+            em.merge(transferencia);
+
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
 
     public List<TransferenciaDTO> buscarTransferenciasPorFilial(TransferenciaDTO dto) throws Exception {
         EntityManager em = factory.createEntityManager();
