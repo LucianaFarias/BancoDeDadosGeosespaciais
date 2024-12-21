@@ -48,8 +48,6 @@ public class PedidoDAO implements IPedidoDAO{
 		return pedidos;
 	}
 
-	public void atualizarEstoque(EstoqueDTO estoque) throws Exception {
-	}
 	@Override
 	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
