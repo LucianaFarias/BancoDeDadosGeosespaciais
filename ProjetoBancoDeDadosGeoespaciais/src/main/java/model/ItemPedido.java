@@ -4,9 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.EstoqueDTO;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "item_pedido")
 public class ItemPedido {
+	
+	@Id
     private int id;
+	
+	@OneToOne
+	@JoinColumn(name = "produto_id", updatable = false)
     private Produto produto;
     private int quantidade;
 

@@ -4,11 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dto.EstoqueDTO;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "pedido")
 public class Pedido {
+	
+	@Id
     private int id;
+	
+	@OneToMany(orphanRemoval = true)
+	@JoinColumn(name = "pedido_id")
     private List<ItemPedido> itens;
+	
+	@Column(name = "entrega")
     private Localizacao localDeEntrega;
+	
+	@Column(name = "origem")
     private Localizacao origemDoPedido;
 
     public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido) {
