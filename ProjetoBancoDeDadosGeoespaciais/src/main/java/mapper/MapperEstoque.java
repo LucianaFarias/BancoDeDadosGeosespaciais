@@ -1,4 +1,4 @@
-package mappers;
+package mapper;
 
 import dto.EstoqueDTO;
 import model.Estoque;
@@ -6,11 +6,9 @@ import model.Estoque;
 public class MapperEstoque {
 
     private MapperProduto mapperProduto;
-	private MapperFilial mapperFilial;
 
     public MapperEstoque() {
         this.mapperProduto = new MapperProduto();
-        this.mapperFilial = new MapperFilial();
     }
 
     public EstoqueDTO toDTO(Estoque estoque) {
@@ -18,7 +16,7 @@ public class MapperEstoque {
         dto.setId(estoque.getId());
         dto.setQuantidade(estoque.getQuantidade());
         dto.setProduto(mapperProduto.toDTO(estoque.getProduto()));
-        dto.setFilial(mapperFilial.toDTO(estoque.getFilial()));
+        dto.setFilial(MapperFilial.toDTO(estoque.getFilial()));
         return dto;
     }
 
@@ -27,7 +25,7 @@ public class MapperEstoque {
         entity.setId(estoque.getId());
         entity.setQuantidade(estoque.getQuantidade());
         entity.setProduto(mapperProduto.toEntity(estoque.getProduto()));
-        entity.setFilial(mapperFilial.toEntity(estoque.getFilial()));
+        entity.setFilial(MapperFilial.toEntity(estoque.getFilial()));
         return entity;
     }
 }

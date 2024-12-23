@@ -1,4 +1,4 @@
-package mappers;
+package mapper;
 
 import dto.ItemPedidoDTO;
 import dto.ProdutoDTO;
