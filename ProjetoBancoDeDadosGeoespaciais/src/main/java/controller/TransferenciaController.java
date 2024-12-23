@@ -10,7 +10,7 @@ import dto.ProdutoDTO;
 import dto.TransferenciaDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import mappers.MapperTransferencia;
+import mapper.MapperTransferencia;
 import model.Transferencia;
 
 public class TransferenciaController {
