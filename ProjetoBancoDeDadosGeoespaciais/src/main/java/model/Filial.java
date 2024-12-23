@@ -8,6 +8,7 @@ import dto.EstoqueDTO;
 import dto.FilialDTO;
 import dto.TransferenciaDTO;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import mapper.MapperEstoque;
 
 @Entity
 @Table(name = "filial")
+@Embeddable
 public class Filial implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,4 +77,5 @@ public class Filial implements Serializable{
                 ", endereço='" + endereco + '\'' +
                 '}';
     }
+	
 }
