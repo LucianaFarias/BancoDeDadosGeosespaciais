@@ -1,38 +1,56 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import dto.EstoqueDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "pedido")
-public class Pedido {
+public class Pedido implements Serializable{
 	
+	
+	private static final long serialVersionUID = 1L;
+
 	@Id
     private int id;
 	
-	@OneToMany(orphanRemoval = true)
-	@JoinColumn(name = "pedido_id")
-    private List<ItemPedido> itens;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "pedido_id", referencedColumnName = "id")
+    private List<ItemPedido> itens = new ArrayList<>();
 	
-	@Column(name = "entrega")
+	@Transient
     private Localizacao localDeEntrega;
 	
-	@Column(name = "origem")
+	@Transient
     private Localizacao origemDoPedido;
-
-    public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido) {
+	
+	@ManyToOne
+	@JoinColumn(name = "filial_id")
+	private Filial filialResponsavel;
+	
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+	
+    public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido, Filial filialResponsavel, Cliente cliente) {
 		this.id = id;
 		this.itens = itens;
 		this.localDeEntrega = localDeEntrega;
 		this.origemDoPedido = origemDoPedido;
+		this.filialResponsavel = filialResponsavel;
+		this.cliente = cliente;
 	}
 
 	public Pedido() {
@@ -73,6 +91,22 @@ public class Pedido {
 
 	public void setOrigemDoPedido(Localizacao origemDoPedido) {
 		this.origemDoPedido = origemDoPedido;
+	}
+
+	public Filial getFilialResponsavel() {
+		return filialResponsavel;
+	}
+
+	public void setFilialResponsavel(Filial filialResponsavel) {
+		this.filialResponsavel = filialResponsavel;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 }
 

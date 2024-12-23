@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,23 +8,24 @@ import dto.EstoqueDTO;
 import dto.FilialDTO;
 import dto.TransferenciaDTO;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import mappers.MapperEstoque;
 
-
-
 @Entity
-public class Filial {
+@Table(name = "filial")
+public class Filial implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 	@Column
     private String nome;
 
-	@Column(name="localizacao")
+	@Embedded
     private Localizacao endereco;
 
     public Filial(int id, String nome, Localizacao endereco) {
