@@ -41,7 +41,8 @@ public class MapperPedido {
         		itensPedidoDTO,
         		destino,
         		origem,
-        		MapperFilial.toDTO(pedido.getFilialResponsavel()));
+        		MapperFilial.toDTO(pedido.getFilialResponsavel()),
+        		pedido.getStatus());
     }
 
     public Pedido toEntity(PedidoDTO pedidoDTO) {
@@ -66,7 +67,9 @@ public class MapperPedido {
         		itensPedido,
         		destino,
         		origem,
-        		MapperFilial.toEntity(pedidoDTO.getFilialResponsavel()), null);
+        		MapperFilial.toEntity(pedidoDTO.getFilialResponsavel()),
+        		null,
+        		pedidoDTO.getStatus());
     }
 
 	public MapperLocalizacao getMapperLocalizacao() {

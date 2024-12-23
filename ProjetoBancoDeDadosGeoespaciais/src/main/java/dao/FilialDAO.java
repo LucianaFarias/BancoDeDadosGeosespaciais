@@ -1,6 +1,5 @@
 package dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,7 +7,6 @@ import dto.FilialDTO;
 import exception.FilialInvalidaException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import mapper.MapperFilial;
 import model.Filial;
@@ -78,40 +76,4 @@ public class FilialDAO implements IFilialDao {
 		    return null;
 		}
 
-	// Retorna a lista ordenada pela distância, das mais próximas para as mais distantes
-	@Override
-	public List<FilialDTO> buscarFiliaisProximas(FilialDTO filial) throws RuntimeException{
-		EntityManager em = entityManagerFactory.createEntityManager();
-
-        List<Filial> resultList;
-        try {
-            em.getTransaction().begin();
-            String query = 
-            		"SELECT l2.* " +
-            	    "FROM filial l1, filial l2 " +
-            	    "WHERE l1.id = :id " +
-            	    "AND l2.id != l1.id " +
-            	    "ORDER BY function('ST_Distance', l1.endereco, l2.endereco)";
-            Query nativeQuery = em.createNativeQuery(query, Filial.class);
-            nativeQuery.setParameter("id", filial.getId());
-            //query.setParameter("origem", filial.getEndereco().getPonto());
-            //query.setParameter("destino", filial.getId());
-
-            resultList = nativeQuery.getResultList();
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw new RuntimeException("Erro ao listar filiais: " + e.getMessage(), e);
-        } finally {
-            em.close();
-        }
-
-        List<FilialDTO> filiais = new ArrayList<>();
-        for (Filial filialEncontrada : resultList) {
-            FilialDTO filialDTO = MapperFilial.toDTO(filialEncontrada);
-            filiais.add(filialDTO);
-        }
-
-        return filiais;		
-	}
 }
