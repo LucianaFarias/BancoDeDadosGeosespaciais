@@ -8,7 +8,7 @@ import dto.PedidoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
-import mappers.MapperPedido;
+import mapper.MapperPedido;
 import model.Estoque;
 import model.Pedido;
 
@@ -56,13 +56,13 @@ public class PedidoDAO implements IPedidoDAO{
 			Pedido pedidoEncontrado = entityManager.find(Pedido.class, pedido.getId());
 			pedido = mapper.toDTO(pedidoEncontrado);
 			entityManager.getTransaction().commit();
+			return pedido;
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
 			throw e;
 		} finally {
 			entityManager.close();
 		}
-		return null;
 	}
 
 }
