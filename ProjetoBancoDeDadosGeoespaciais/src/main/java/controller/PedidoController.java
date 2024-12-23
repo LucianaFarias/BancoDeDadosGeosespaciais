@@ -1,10 +1,12 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.IPedidoDAO;
 import dao.PedidoDAO;
 import dto.PedidoDTO;
+import model.StatusPedido;
 
 public class PedidoController {
 	
@@ -16,6 +18,16 @@ public class PedidoController {
 	
 	public List<PedidoDTO> listarPedidos() throws Exception{
 		return pedidoDAO.listarPedidos();
+	}
+	
+	public List<PedidoDTO> listarPedidosPendentes() throws Exception{
+		List<PedidoDTO> pendentes = new ArrayList<>();
+		for(PedidoDTO pedido: listarPedidos()) {
+			if(!pedido.getStatus().equals(StatusPedido.CONCLUIDO)) {
+				pendentes.add(pedido);
+			}
+		}
+		return pendentes;
 	}
 	
 	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {

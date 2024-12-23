@@ -6,8 +6,9 @@ import java.util.List;
 
 import dto.EstoqueDTO;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -44,13 +45,17 @@ public class Pedido implements Serializable{
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
-    public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido, Filial filialResponsavel, Cliente cliente) {
+	@Enumerated(EnumType.STRING)
+	private StatusPedido status;
+	
+    public Pedido(int id, List<ItemPedido> itens, Localizacao localDeEntrega, Localizacao origemDoPedido, Filial filialResponsavel, Cliente cliente, StatusPedido status) {
 		this.id = id;
 		this.itens = itens;
 		this.localDeEntrega = localDeEntrega;
 		this.origemDoPedido = origemDoPedido;
 		this.filialResponsavel = filialResponsavel;
 		this.cliente = cliente;
+		this.status = status;
 	}
 
 	public Pedido() {
@@ -107,6 +112,14 @@ public class Pedido implements Serializable{
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
 	}
 }
 
