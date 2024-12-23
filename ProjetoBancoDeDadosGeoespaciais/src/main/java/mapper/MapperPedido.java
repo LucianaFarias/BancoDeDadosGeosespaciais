@@ -1,4 +1,4 @@
-package mappers;
+package mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import dto.ItemPedidoDTO;
 import dto.LocalizacaoDTO;
 import dto.PedidoDTO;
-import mapper.MapperFilial;
 import model.ItemPedido;
 import model.Localizacao;
 import model.Pedido;

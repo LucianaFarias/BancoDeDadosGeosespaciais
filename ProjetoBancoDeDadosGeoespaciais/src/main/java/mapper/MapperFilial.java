@@ -14,6 +14,7 @@ public class MapperFilial {
 
         FilialDTO dto = new FilialDTO();
         dto.setNome(filial.getNome());
+        dto.setId(filial.getId());
 
         if (filial.getEndereco() != null) {
             LocalizacaoDTO localizacaoDTO = new LocalizacaoDTO();
@@ -32,18 +33,15 @@ public class MapperFilial {
             return null;
         }
 
-        Filial filial = new Filial();
-        filial.setNome(dto.getNome());
-
+        Localizacao localizacao = new Localizacao();
         if (dto.getEndereco() != null) {
-            Localizacao localizacao = new Localizacao();
             localizacao.setEstado(dto.getEndereco().getEstado());
             localizacao.setCidade(dto.getEndereco().getCidade());
             localizacao.setLatitude(dto.getEndereco().getLatitude());
             localizacao.setLongitude(dto.getEndereco().getLongitude());
-            filial.setEndereco(localizacao);
         }
 
+        Filial filial = new Filial(dto.getId(), dto.getNome(), localizacao);
         return filial;
     }
 }

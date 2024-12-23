@@ -9,7 +9,7 @@ import dto.ProdutoDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
-import mappers.MapperEstoque;
+import mapper.MapperEstoque;
 import model.Estoque;
 
 public class EstoqueDAO implements IEstoqueDAO{

@@ -8,6 +8,7 @@ import dto.FilialDTO;
 import exception.FilialInvalidaException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import mapper.MapperFilial;
 import model.Filial;
@@ -85,14 +86,18 @@ public class FilialDAO implements IFilialDao {
         List<Filial> resultList;
         try {
             em.getTransaction().begin();
-            TypedQuery<Filial> query = em.createQuery(
-                    "SELECT f, ST_Distance(f.endereco.ponto, :filialOrigem) AS distance " +
-                    "FROM Filial f WHERE f.id != :filialId " +
-                    "ORDER BY distance", Filial.class);
-            query.setParameter("filialId", filial.getId());
-            query.setParameter("filialOrigem", filial.getEndereco().getPonto().toText());
+            String query = 
+            		"SELECT l2.* " +
+            	    "FROM filial l1, filial l2 " +
+            	    "WHERE l1.id = :id " +
+            	    "AND l2.id != l1.id " +
+            	    "ORDER BY function('ST_Distance', l1.endereco, l2.endereco)";
+            Query nativeQuery = em.createNativeQuery(query, Filial.class);
+            nativeQuery.setParameter("id", filial.getId());
+            //query.setParameter("origem", filial.getEndereco().getPonto());
+            //query.setParameter("destino", filial.getId());
 
-            resultList = query.getResultList();
+            resultList = nativeQuery.getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();

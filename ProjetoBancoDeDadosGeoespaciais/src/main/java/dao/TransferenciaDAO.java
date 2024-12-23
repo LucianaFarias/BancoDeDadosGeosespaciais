@@ -5,9 +5,9 @@ import java.util.List;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import mapper.MapperTransferencia;
 import dto.TransferenciaDTO;
 import model.Transferencia;
-import mappers.MapperTransferencia;
 
 public class TransferenciaDAO implements ITransferenciaDAO {
 
