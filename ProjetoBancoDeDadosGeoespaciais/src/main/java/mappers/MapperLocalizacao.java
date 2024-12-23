@@ -7,12 +7,14 @@ public class MapperLocalizacao {
 
     public LocalizacaoDTO toDTO(Localizacao localizacao) {
     	LocalizacaoDTO dto = new LocalizacaoDTO();
-        dto.setId(localizacao.getId());
-        dto.setCidade(localizacao.getCidade());
-        dto.setEstado(localizacao.getEstado());
-        dto.setLatitude(localizacao.getLatitude());
-        dto.setLongitude(localizacao.getLongitude());
-        dto.setPonto(localizacao.getPonto());
+    	if(localizacao != null) {
+    		dto.setId(localizacao.getId());
+    		dto.setCidade(localizacao.getCidade());
+    		dto.setEstado(localizacao.getEstado());
+    		dto.setLatitude(localizacao.getLatitude());
+    		dto.setLongitude(localizacao.getLongitude());
+    		dto.setPonto(localizacao.getPonto()); 		
+    	}
         return dto;
     }
 
