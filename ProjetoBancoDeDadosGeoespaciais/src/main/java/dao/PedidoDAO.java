@@ -30,8 +30,8 @@ public class PedidoDAO implements IPedidoDAO{
 		try {
 			em.getTransaction().begin();
 			TypedQuery<Pedido> query = em.createQuery(
-					"SELECT e FROM Pedido", Pedido.class);
-
+					"SELECT p FROM Pedido p", Pedido.class);
+			
 			resultList = query.getResultList();
 			em.getTransaction().commit();
 		} catch (Exception e) {
