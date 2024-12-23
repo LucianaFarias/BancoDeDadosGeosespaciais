@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 public class Conexao {
 	
 	private static Conexao INSTANCIA;
-    private final EntityManagerFactory factory;
+    private EntityManagerFactory factory;
 
     private Conexao() {
     	this.factory = Persistence.createEntityManagerFactory("spatialite-test");

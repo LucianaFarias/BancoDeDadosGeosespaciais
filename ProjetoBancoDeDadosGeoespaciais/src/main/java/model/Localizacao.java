@@ -4,13 +4,21 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
+
+@Embeddable
 public class Localizacao {
 	
+	@Transient
 	private String id;
+	@Transient
 	private String estado;
+	@Transient
 	private String cidade;
 	private double latitude;
 	private double longitude;
+	@Transient
 	private Point ponto;
 
 	public Localizacao(String id, String estado, String cidade, double latitude, double longitude) {
