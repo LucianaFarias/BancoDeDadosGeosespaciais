@@ -6,14 +6,30 @@ import dto.EstoqueDTO;
 import dto.FilialDTO;
 import dto.TransferenciaDTO;
 import exception.EstoqueInsuficienteException;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import mapper.MapperFilial;
 import mappers.MapperEstoque;
 import mappers.MapperProduto;
 
+@Entity
+@Table(name = "estoque")
 public class Estoque {
+	
+	@Id
 	private int id;
+	
+	@ManyToOne
+	@JoinColumn(name = "filial_id")
     private Filial filial;
+	
+	@ManyToOne
+	@JoinColumn(name = "produto_id")
     private Produto produto;
+	
     private int quantidade;
    
     public Estoque(int id, Filial filial, Produto produto, int quantidade) {
