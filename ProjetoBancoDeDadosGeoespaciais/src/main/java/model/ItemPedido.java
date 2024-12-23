@@ -1,12 +1,27 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import dto.EstoqueDTO;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
-public class ItemPedido {
+@Entity
+@Table(name = "item_pedido")
+public class ItemPedido implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id
     private int id;
+	
+	@ManyToOne
+	@JoinColumn(name = "produto_id")
     private Produto produto;
     private int quantidade;
 
@@ -14,6 +29,10 @@ public class ItemPedido {
         this.id = id;
         this.produto = produto;
         this.quantidade = quantidade;
+    }
+    
+    public ItemPedido() {
+    	
     }
   
     //Retorna a quantidade de cada produto que falta em vários estoques
