@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.Conexao;
 import dao.EstoqueDAO;
 import dao.FilialDAO;
 import dao.IEstoqueDAO;
@@ -13,13 +12,12 @@ import dto.FilialDTO;
 import dto.PedidoDTO;
 import dto.TransferenciaDTO;
 import exception.EstoqueInsuficienteException;
-import mappers.MapperEstoque;
-import mappers.MapperPedido;
+import mapper.MapperEstoque;
+import mapper.MapperPedido;
 import model.Pedido;
 
 public class EstoqueController {
 	
-	private Conexao conexao;
 	private IEstoqueDAO estoqueDAO;
 	private IFilialDao filialDAO;
 	private MapperEstoque mapperEstoque;

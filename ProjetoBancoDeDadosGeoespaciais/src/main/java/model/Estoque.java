@@ -11,9 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import mapper.MapperEstoque;
 import mapper.MapperFilial;
-import mappers.MapperEstoque;
-import mappers.MapperProduto;
+import mapper.MapperProduto;
 
 @Entity
 @Table(name = "estoque")

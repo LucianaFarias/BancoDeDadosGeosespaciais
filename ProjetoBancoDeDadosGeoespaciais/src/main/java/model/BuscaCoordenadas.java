@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dto.LocalizacaoDTO;
-import mappers.MapperLocalizacao;
+import mapper.MapperLocalizacao;
 
 public class BuscaCoordenadas {
 	// Cria a localização da cidade informada
