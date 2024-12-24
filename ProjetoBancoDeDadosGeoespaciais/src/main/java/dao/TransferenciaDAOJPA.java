@@ -3,29 +3,29 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
-import mapper.MapperTransferencia;
+
 import dto.FilialDTO;
 import dto.TransferenciaDTO;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
+import mapper.MapperTransferencia;
 import model.Transferencia;
 
-public class TransferenciaDAO implements ITransferenciaDAO {
+public class TransferenciaDAOJPA implements ITransferenciaDAO {
 
-    private static TransferenciaDAO instance;
+    private static TransferenciaDAOJPA instance;
     private EntityManagerFactory factory;
 
     // Construtor privado para garantir que a instância seja criada apenas uma vez
-    private TransferenciaDAO() {
-        this.factory = Persistence.createEntityManagerFactory("loja");
+    private TransferenciaDAOJPA() {
+        this.factory = ConexaoJPA.getInstancia().getFactory();
     }
 
     // Método para obter a instância única do DAO (Singleton)
-    public static synchronized TransferenciaDAO getInstance() {
+    public static synchronized TransferenciaDAOJPA getInstance() {
         if (instance == null) {
-            instance = new TransferenciaDAO();
+            instance = new TransferenciaDAOJPA();
         }
         return instance;
     }
@@ -52,7 +52,6 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         EntityManager em = factory.createEntityManager();
         try {
             em.getTransaction().begin();
-            MapperTransferencia mapper = new MapperTransferencia();
             Transferencia transferencia = em.find(Transferencia.class, dto.getId());
             if (transferencia == null) {
                 throw new IllegalArgumentException("Transferência não encontrada com o ID: " + dto.getId());
