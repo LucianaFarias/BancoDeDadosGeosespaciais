@@ -90,6 +90,31 @@ public class TransferenciaDAO implements ITransferenciaDAO {
             em.close();
         }
     }
+    
+    public void excluirTransferencia(TransferenciaDTO dto) throws Exception {
+        EntityManager em = factory.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            
+            // Localiza a transferência pelo ID fornecido
+            Transferencia transferencia = em.find(Transferencia.class, dto.getId());
+            
+            // Remove a transferência
+            em.remove(transferencia);
+            
+            // Confirma a transação
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            // Em caso de erro, faz o rollback
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            em.close();
+        }
+    }
+
 
     public List<TransferenciaDTO> buscarTransferenciasPorFilial(FilialDTO filial) throws Exception {
         EntityManager em = factory.createEntityManager();
