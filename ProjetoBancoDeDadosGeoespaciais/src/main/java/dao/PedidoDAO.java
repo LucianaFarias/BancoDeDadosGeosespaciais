@@ -1,68 +1,52 @@
-package dao;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dto.EstoqueDTO;
 import dto.PedidoDTO;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
 import mapper.MapperPedido;
-import model.Estoque;
-import model.Pedido;
 
-public class PedidoDAO implements IPedidoDAO{
-	
-	private EntityManagerFactory entityManagerFactory;
-	private MapperPedido mapper;
+public class PedidoDAOJDBC {
 
-	public PedidoDAO() {
-		this.entityManagerFactory = Conexao.getInstancia().getFactory();
-		this.mapper = new MapperPedido();
-	}
 
-	@Override
-	public List<PedidoDTO> listarPedidos() throws Exception{
-		EntityManager em = entityManagerFactory.createEntityManager();
+    public PedidoDAOJDBC() {
+       
+    }
 
-		List<Pedido> resultList;
-		try {
-			em.getTransaction().begin();
-			TypedQuery<Pedido> query = em.createQuery(
-					"SELECT p FROM Pedido p", Pedido.class);
-			
-			resultList = query.getResultList();
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-	    	throw e;
-	    }finally {
-	    	em.close();
-		}
-		
-		List<PedidoDTO> pedidos = new ArrayList<>();
-		for(Pedido pedido: resultList) {
-			pedidos.add(mapper.toDTO(pedido));
-		}
-		return pedidos;
-	}
+    public List<PedidoDTO> listarPedidos() throws SQLException {
+        List<PedidoDTO> pedidos = new ArrayList<>();
+        String sql = "SELECT * FROM Pedido";
 
-	@Override
-	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		try {
-			entityManager.getTransaction().begin();
-			Pedido pedidoEncontrado = entityManager.find(Pedido.class, pedido.getId());
-			pedido = mapper.toDTO(pedidoEncontrado);
-			entityManager.getTransaction().commit();
-			return pedido;
-		} catch (Exception e) {
-			entityManager.getTransaction().rollback();
-			throw e;
-		} finally {
-			entityManager.close();
-		}
-	}
+        try (Connection conn = ConexaoJDBC.getInstancia().getConnection();
+			PreparedStatement statement = connection.prepareStatement(sql);
+        	 ResultSet resultSet = statement.executeQuery()) {
 
+            while (resultSet.next()) {
+                PedidoDTO pedido = mapper.toDTO(resultSet);
+                pedidos.add(pedido);
+            }
+        }
+
+        return pedidos;
+    }
+
+    public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws SQLException {
+        String sql = "SELECT * FROM Pedido WHERE id = ?";
+
+        try (Connection conn = ConexaoJDBC.getInstancia().getConnection();
+			PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, pedido.getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                pedido = mapper.toDTO(resultSet);
+            } else {
+                throw new SQLException("Pedido não encontrado.");
+            }
+        }
+
+        return pedido;
+    }
 }
