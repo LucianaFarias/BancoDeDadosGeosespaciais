@@ -93,6 +93,33 @@ public class EstoqueDAO implements IEstoqueDAO{
 	    }
 	}
 	
+	@Override
+	public List<EstoqueDTO> listarEstoques() throws Exception {
+		EntityManager em = factory.createEntityManager();
+
+	    List<Estoque> resultList;
+	    try {
+	        em.getTransaction().begin();
+	        TypedQuery<Estoque> query = em.createQuery(
+	                "SELECT e FROM Estoque e", Estoque.class);
+
+	        resultList = query.getResultList();
+	        em.getTransaction().commit();
+	    } catch (Exception e) {
+	        em.getTransaction().rollback();
+	        throw e;
+	    } finally {
+	        em.close();
+	    }
+
+	    List<EstoqueDTO> estoques = new ArrayList<>();
+	    for (Estoque estoque : resultList) {
+	        estoques.add(mapper.toDTO(estoque));
+	    }
+
+	    return estoques;
+	}
+	
 	public EntityManagerFactory getFactory() {
 		return factory;
 	}
@@ -100,6 +127,7 @@ public class EstoqueDAO implements IEstoqueDAO{
 	public void setFactory(EntityManagerFactory factory) {
 		this.factory = factory;
 	}
+
 
 
 }

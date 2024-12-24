@@ -2,20 +2,24 @@ package dto;
 
 import java.util.List;
 
+import model.StatusPedido;
+
 public class PedidoDTO {
     private int id;
     private List<ItemPedidoDTO> itens;
     private LocalizacaoDTO localDeEntrega;
     private LocalizacaoDTO origemDoPedido;
     private FilialDTO filialResponsavel;
+	private StatusPedido status;
 
     public PedidoDTO(int id, List<ItemPedidoDTO> itens, LocalizacaoDTO localDeEntrega,
-			LocalizacaoDTO origemDoPedido, FilialDTO filialResponsavel) {
+			LocalizacaoDTO origemDoPedido, FilialDTO filialResponsavel, StatusPedido status) {
 		this.id = id;
 		this.itens = itens;
 		this.localDeEntrega = localDeEntrega;
 		this.origemDoPedido = origemDoPedido;
 		this.setFilialResponsavel(filialResponsavel);
+		this.status = status;
 	}
 
 	public PedidoDTO() {
@@ -59,5 +63,13 @@ public class PedidoDTO {
 
 	public void setFilialResponsavel(FilialDTO filialResponsavel) {
 		this.filialResponsavel = filialResponsavel;
+	}
+
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
 	}
 }
