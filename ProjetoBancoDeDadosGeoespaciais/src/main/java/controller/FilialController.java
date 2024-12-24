@@ -1,16 +1,17 @@
 package controller;
 
-import dao.FilialDAO;
+import java.util.List;
+
+import dao.FilialDAOJDBC;
+import dao.IFilialDao;
 import dto.FilialDTO;
 import exception.FilialInvalidaException;
 
-import java.util.List;
-
 public class FilialController {
-    private FilialDAO filialDAO;
+    private IFilialDao filialDAO;
 
     public FilialController() {
-        this.filialDAO = new FilialDAO();
+        this.filialDAO = new FilialDAOJDBC();
     }
 
     public void cadastrarFilial(FilialDTO filialDTO) {
