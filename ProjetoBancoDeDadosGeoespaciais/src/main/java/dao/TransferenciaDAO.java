@@ -2,22 +2,39 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import mapper.MapperTransferencia;
+import dto.FilialDTO;
 import dto.TransferenciaDTO;
 import model.Transferencia;
 
 public class TransferenciaDAO implements ITransferenciaDAO {
 
+    private static TransferenciaDAO instance;
     private EntityManagerFactory factory;
+
+    // Construtor privado para garantir que a instância seja criada apenas uma vez
+    private TransferenciaDAO() {
+        this.factory = Persistence.createEntityManagerFactory("loja");
+    }
+
+    // Método para obter a instância única do DAO (Singleton)
+    public static synchronized TransferenciaDAO getInstance() {
+        if (instance == null) {
+            instance = new TransferenciaDAO();
+        }
+        return instance;
+    }
 
     public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
         EntityManager em = factory.createEntityManager();
-        MapperTransferencia mapper = new MapperTransferencia();
         try {
             em.getTransaction().begin();
+            MapperTransferencia mapper = new MapperTransferencia();
             Transferencia transferencia = mapper.toEntity(dto);
             em.persist(transferencia);
             em.getTransaction().commit();
@@ -33,15 +50,15 @@ public class TransferenciaDAO implements ITransferenciaDAO {
 
     public void registrarChegadaEstoque(TransferenciaDTO dto) throws Exception {
         EntityManager em = factory.createEntityManager();
-        MapperTransferencia mapper = new MapperTransferencia();
         try {
             em.getTransaction().begin();
-
-            // Atualizar transferência como concluída
-            Transferencia transferencia = mapper.toEntity(dto);
+            MapperTransferencia mapper = new MapperTransferencia();
+            Transferencia transferencia = em.find(Transferencia.class, dto.getId());
+            if (transferencia == null) {
+                throw new IllegalArgumentException("Transferência não encontrada com o ID: " + dto.getId());
+            }
             transferencia.setConcluida(true);
             em.merge(transferencia);
-
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -52,18 +69,17 @@ public class TransferenciaDAO implements ITransferenciaDAO {
             em.close();
         }
     }
-    
+
     public void cancelarTransferencia(TransferenciaDTO dto) throws Exception {
         EntityManager em = factory.createEntityManager();
-        MapperTransferencia mapper = new MapperTransferencia();
         try {
-        	em.getTransaction().begin();
-
-            // Atualizar transferência como cancelada
-            Transferencia transferencia = mapper.toEntity(dto);
+            em.getTransaction().begin();
+            Transferencia transferencia = em.find(Transferencia.class, dto.getId());
+            if (transferencia == null) {
+                throw new IllegalArgumentException("Transferência não encontrada com o ID: " + dto.getId());
+            }
             transferencia.setCancelada(true);
             em.merge(transferencia);
-
             em.getTransaction().commit();
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
@@ -75,39 +91,32 @@ public class TransferenciaDAO implements ITransferenciaDAO {
         }
     }
 
-    public List<TransferenciaDTO> buscarTransferenciasPorFilial(TransferenciaDTO dto) throws Exception {
+    public List<TransferenciaDTO> buscarTransferenciasPorFilial(FilialDTO filial) throws Exception {
         EntityManager em = factory.createEntityManager();
-        List<Transferencia> transferencias;
+        List<TransferenciaDTO> transferenciasDTO = new ArrayList<>();
         try {
             TypedQuery<Transferencia> query = em.createQuery(
                 "SELECT t FROM Transferencia t WHERE t.origem.id = :filialId OR t.destino.id = :filialId",
                 Transferencia.class
             );
-            query.setParameter("filialId", dto.getOrigem().getId());
-            transferencias = query.getResultList();
+            query.setParameter("filialId", filial.getId());
+            List<Transferencia> transferencias = query.getResultList();
+            MapperTransferencia mapper = new MapperTransferencia();
+            for (Transferencia transferencia : transferencias) {
+                transferenciasDTO.add(mapper.toDTO(transferencia));
+            }
         } catch (Exception e) {
             throw e;
         } finally {
             em.close();
         }
-
-        MapperTransferencia mapper = new MapperTransferencia();
-        List<TransferenciaDTO> transferenciasDTO = new ArrayList<>();
-        for (Transferencia transferencia : transferencias) {
-            transferenciasDTO.add(mapper.toDTO(transferencia));
-        }
         return transferenciasDTO;
     }
 
-    public List<TransferenciaDTO> listarTransferenciasPorOrigem(TransferenciaDTO dto) throws Exception {
-        List<TransferenciaDTO> transferencias = buscarTransferenciasPorFilial(dto);
-        List<TransferenciaDTO> transferenciasFiltradas = new ArrayList<>();
-
-        for (TransferenciaDTO dtoTransferencia : transferencias) {
-            if (dtoTransferencia.getOrigem() != null && dtoTransferencia.getOrigem().getId() == dto.getOrigem().getId()) {
-                transferenciasFiltradas.add(dtoTransferencia);
-            }
-        }
-        return transferenciasFiltradas;
+    public List<TransferenciaDTO> listarTransferenciasPorOrigem(FilialDTO origem) throws Exception {
+        List<TransferenciaDTO> transferencias = buscarTransferenciasPorFilial(origem);
+        return transferencias.stream()
+                .filter(dto -> dto.getOrigem() != null && dto.getOrigem().getId() == origem.getId())
+                .collect(Collectors.toList());
     }
 }
