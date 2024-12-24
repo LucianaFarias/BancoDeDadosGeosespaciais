@@ -9,7 +9,7 @@ public class Conexao {
     private EntityManagerFactory factory;
 
     private Conexao() {
-    	this.factory = Persistence.createEntityManagerFactory("spatialite-test");
+    	this.factory = Persistence.createEntityManagerFactory("loja");
     }
     
     public static Conexao getInstancia() {

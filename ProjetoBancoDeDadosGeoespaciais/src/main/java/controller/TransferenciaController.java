@@ -1,25 +1,13 @@
 package controller;
 
 import java.util.List;
-
-import dao.EstoqueDAO;
 import dao.TransferenciaDAO;
-import dto.EstoqueDTO;
 import dto.FilialDTO;
-import dto.ProdutoDTO;
 import dto.TransferenciaDTO;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import mapper.MapperTransferencia;
-import model.Transferencia;
 
 public class TransferenciaController {
 
-    private TransferenciaDAO dao;
-
-    public List<TransferenciaDTO> listarTransferenciasPorFilial(TransferenciaDTO dto) throws Exception {
-        return dao.buscarTransferenciasPorFilial(dto);
-    }
+    private TransferenciaDAO dao = TransferenciaDAO.getInstance();  // Obtendo a instância do DAO via Singleton
 
     public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
         dao.registrarTransferencia(dto);
@@ -29,8 +17,16 @@ public class TransferenciaController {
         dao.registrarChegadaEstoque(dto);
     }
 
-    public void gerarRelatorioTransferenciasPorOrigem(TransferenciaDTO dto) throws Exception {
-        List<TransferenciaDTO> transferencias = dao.listarTransferenciasPorOrigem(dto);
+    public void cancelarTransferencia(TransferenciaDTO dto) throws Exception {
+        dao.cancelarTransferencia(dto);
+    }
+
+    public List<TransferenciaDTO> listarTransferenciasPorFilial(FilialDTO filial) throws Exception {
+        return dao.buscarTransferenciasPorFilial(filial);
+    }
+
+    public void gerarRelatorioTransferenciasPorOrigem(FilialDTO origem) throws Exception {
+        List<TransferenciaDTO> transferencias = dao.listarTransferenciasPorOrigem(origem);
         System.out.println("Relatório de Movimentações de Estoque por Origem:");
         for (TransferenciaDTO transferencia : transferencias) {
             System.out.println("ID: " + transferencia.getId() +
