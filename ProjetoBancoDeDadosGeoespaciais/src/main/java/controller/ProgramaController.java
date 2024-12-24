@@ -1,12 +1,14 @@
 package controller;
 
-import dao.Conexao;
+import dao.ConexaoJDBC;
+import dao.ConexaoJPA;
 
 public class ProgramaController {
 	
 	//Fecha a EntityManagerFactory e encerra o programa
 	public void encerrar() {
-		Conexao.getInstancia().fecharConexao();
+		ConexaoJDBC.getInstancia().fechar();
+		ConexaoJPA.getInstancia().fechar();
 		System.exit(0);
 	}
 

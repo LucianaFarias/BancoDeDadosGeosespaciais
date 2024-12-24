@@ -1,13 +1,15 @@
 package controller;
 
 import java.util.List;
-import dao.TransferenciaDAO;
+
+import dao.ITransferenciaDAO;
+import dao.TransferenciaDAOJPA;
 import dto.FilialDTO;
 import dto.TransferenciaDTO;
 
 public class TransferenciaController {
 
-    private TransferenciaDAO dao = TransferenciaDAO.getInstance();  // Obtendo a instância do DAO via Singleton
+    private ITransferenciaDAO dao = TransferenciaDAOJPA.getInstance();  // Obtendo a instância do DAO via Singleton
 
     public void registrarTransferencia(TransferenciaDTO dto) throws Exception {
         dao.registrarTransferencia(dto);

@@ -3,13 +3,10 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DistanciaDAO;
-import dao.EstoqueDAO;
-import dao.FilialDAO;
-import dao.IDistanciaDAO;
+import dao.EstoqueDAOJPA;
+import dao.FilialDAOJDBC;
 import dao.IEstoqueDAO;
 import dao.IFilialDao;
-import dto.DistanciaDTO;
 import dto.EstoqueDTO;
 import dto.FilialDTO;
 import dto.PedidoDTO;
@@ -24,13 +21,11 @@ public class EstoqueController {
 	
 	private IEstoqueDAO estoqueDAO;
 	private IFilialDao filialDAO;
-	private IDistanciaDAO distanciaDAO;
 	private MapperEstoque mapperEstoque;
 	
 	public EstoqueController() {
-		this.estoqueDAO = new EstoqueDAO();
-		this.filialDAO = new FilialDAO();
-		this.setDistanciaDAO(new DistanciaDAO());
+		this.estoqueDAO = new EstoqueDAOJPA();
+		this.filialDAO = new FilialDAOJDBC();
 		this.mapperEstoque = new MapperEstoque();
 	}
 
@@ -137,21 +132,7 @@ public class EstoqueController {
 	
 	public List<FilialDTO> buscarFiliaisMaisProximas(FilialDTO filial) throws Exception{
 		
-		List<DistanciaDTO> distancias = distanciaDAO.buscarDistanciasDaFilial(filial);
-		
-		List<FilialDTO> filiaisProximasDaInicial = new ArrayList<>();
-		for(DistanciaDTO distancia: distancias) {
-			
-			if(distancia.getFilial1().getId() == filial.getId()) { 
-				
-				filiaisProximasDaInicial.add(distancia.getFilial2());
-				
-			}else if(distancia.getFilial2().getId() == filial.getId()) {
-				
-				filiaisProximasDaInicial.add(distancia.getFilial1());
-
-			}
-		}
+		List<FilialDTO> filiaisProximasDaInicial = filialDAO.buscarFiliaisProximas(filial);
 		return filiaisProximasDaInicial;
 	}
 	
@@ -187,11 +168,4 @@ public class EstoqueController {
 		this.mapperEstoque = mapperEstoque;
 	}
 
-	public IDistanciaDAO getDistanciaDAO() {
-		return distanciaDAO;
-	}
-
-	public void setDistanciaDAO(IDistanciaDAO distanciaDAO) {
-		this.distanciaDAO = distanciaDAO;
-	}
 }

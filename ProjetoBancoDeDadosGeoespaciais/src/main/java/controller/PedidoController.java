@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.IPedidoDAO;
-import dao.PedidoDAO;
+import dao.PedidoDAOJPA;
 import dto.PedidoDTO;
 import model.StatusPedido;
 
@@ -13,7 +13,7 @@ public class PedidoController {
 	private IPedidoDAO pedidoDAO;
 	
 	public PedidoController() {
-		this.setPedidoDAO(new PedidoDAO());
+		this.setPedidoDAO(new PedidoDAOJPA());
 	}
 	
 	public List<PedidoDTO> listarPedidos() throws Exception{
