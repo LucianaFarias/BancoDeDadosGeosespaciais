@@ -42,7 +42,7 @@ public class ConexaoJDBC {
         return INSTANCIA;
     }
 
-    public void fecharConexao() {
+    public void fechar() {
         if (connection != null) {
             try {
                 connection.close();
@@ -56,4 +56,13 @@ public class ConexaoJDBC {
     public Connection getConnection() {
         return connection;
     }
+
+	
+	public ConexaoJDBC abrir() {
+		if(ConexaoJPA.getInstancia().getFactory().isOpen()) {
+			ConexaoJPA.getInstancia().fechar();
+		}
+		return INSTANCIA;
+	}
+
 }

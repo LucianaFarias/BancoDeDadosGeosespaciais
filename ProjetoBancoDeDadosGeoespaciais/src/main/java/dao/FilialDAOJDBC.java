@@ -88,4 +88,37 @@ public class FilialDAOJDBC implements IFilialDao {
 
         return filialDTO;
     }
+    
+    public List<FilialDTO> buscarFiliaisProximas(FilialDTO filial) {
+        String sql = "SELECT b.* "
+        		+ "FROM filial a, filial b "
+        		+ "WHERE a.id = ? AND b.id <> ?"
+        		+ "ORDER BY Distance(a.endereco, b.endereco)";
+        List<FilialDTO> filiais = new ArrayList<>();
+
+        try (Connection conn = ConexaoJDBC.getInstancia().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        	stmt.setInt(1, filial.getId());
+        	stmt.setInt(2, filial.getId());
+        	ResultSet rs = stmt.executeQuery();
+        	
+            while (rs.next()) {
+                FilialDTO filialDTO = new FilialDTO();
+                filialDTO.setId(rs.getInt("id"));
+                filialDTO.setNome(rs.getString("nome"));
+                filialDTO.setEndereco(new LocalizacaoDTO());
+                filialDTO.getEndereco().setLatitude(rs.getInt("latitude"));
+                filialDTO.getEndereco().setLatitude(rs.getInt("longitude"));
+
+                filiais.add(filialDTO);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar filiais: " + e.getMessage(), e);
+        }
+
+        return filiais;
+    }
+    
+    
 }
