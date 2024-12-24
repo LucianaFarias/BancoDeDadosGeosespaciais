@@ -20,6 +20,10 @@ public class TransferenciaController {
     public void cancelarTransferencia(TransferenciaDTO dto) throws Exception {
         dao.cancelarTransferencia(dto);
     }
+    
+    public void excluirTransferencia(TransferenciaDTO dto) throws Exception {
+        dao.excluirTransferencia(dto);
+    }
 
     public List<TransferenciaDTO> listarTransferenciasPorFilial(FilialDTO filial) throws Exception {
         return dao.buscarTransferenciasPorFilial(filial);
