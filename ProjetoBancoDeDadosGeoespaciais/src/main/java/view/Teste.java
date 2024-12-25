@@ -13,6 +13,7 @@ import dto.ItemPedidoDTO;
 import dto.LocalizacaoDTO;
 import dto.PedidoDTO;
 import dto.TransferenciaDTO;
+import exception.EstoqueInsuficienteException;
 import model.BuscaCoordenadas;
 
 public class Teste {
@@ -65,7 +66,7 @@ public class Teste {
 
 	            case 2:
 	                try {
-	                    for (PedidoDTO pedido : controllerPedido.listarPedidos()) {
+	                    for (PedidoDTO pedido : controllerPedido.listarPedidosPendentes()) {
 	                        System.out.println("ID " + pedido.getId());
 	                        System.out.println("Filial responsável: " + pedido.getFilialResponsavel().getNome());
 	                        System.out.print("Itens: ");
@@ -102,41 +103,60 @@ public class Teste {
 	                } else {
 	                    PedidoDTO pedido = new PedidoDTO();
 	                    pedido.setId(idPedido);
-	                    try {
-	                        pedido = controllerPedido.buscarPedidoPorId(pedido);
+	                    
+	                        try {
+								pedido = controllerPedido.buscarPedidoPorId(pedido);
+							} catch (Exception e) {
+								System.out.println("Erro ao carregar os dados");
+								e.printStackTrace();
+								break;
+							}
 	                        if (pedido == null) {
 	                            System.out.println("Pedido não encontrado");
 	                            break;
 	                        }
 
 	                        FilialDTO filialResponsavel = pedido.getFilialResponsavel();
-	                        List<TransferenciaDTO> transferencias = estoqueController.necessitaTransferenciaDeEstoque(filialResponsavel, pedido);
+	                        List<TransferenciaDTO> transferencias;
+							try {
+								transferencias = estoqueController.necessitaTransferenciaDeEstoque(filialResponsavel, pedido);
+								if (transferencias.isEmpty()) {
+									System.out.print("Estoques disponíveis na filial. Atender pedido? [S/N]:");
+									String resposta = scanner.nextLine();
+									if (resposta.equalsIgnoreCase("S")) {
+										try {
+											estoqueController.atenderPedido(pedido);
+											controllerPedido.concluirPedido(pedido);
+										} catch (Exception e) {
+											System.out.println("Erro ao carregar os dados");
+											e.printStackTrace();
+											break;
+										}
+										break;
+									} else {
+										break;
+									}
+								} else {
+									System.out.println("Solicitar transferências de estoque? [S/N]");
+									String resposta = scanner.nextLine();
+									if (resposta.equalsIgnoreCase("S")) {
+										for (TransferenciaDTO transferencia : transferencias) {
+											System.out.println(transferencia.getQuantidade() + " " + transferencia.getProduto().getNome() + " vindo de " + transferencia.getOrigem().getNome());
+											transferenciaController.registrarTransferencia(transferencia);
+											controllerPedido.aguardarTransferencia(pedido);
+										}
+									
+									} else {
+										break;
+									}
+								}
+							} catch (Exception e) {
+								System.out.println("Erro ao carregar os dados");
+								e.printStackTrace();
+								break;
+							}
 
-	                        if (transferencias.isEmpty()) {
-	                            System.out.print("Estoques disponíveis na filial. Atender pedido? [S/N]:");
-	                            String resposta = scanner.nextLine();
-	                            if (resposta.equalsIgnoreCase("S")) {
-	                                // estoqueController.atenderPedido(filialResponsavel, pedido);
-	                                break;
-	                            } else {
-	                                break;
-	                            }
-	                        } else {
-	                            System.out.println("Solicitar transferências de estoque? [S/N]");
-	                            String resposta = scanner.nextLine();
-	                            if (resposta.equalsIgnoreCase("S")) {
-	                                for (TransferenciaDTO transferencia : transferencias) {
-	                                    System.out.println(transferencia.getQuantidade() + " " + transferencia.getProduto().getNome() + " vindo de " + transferencia.getOrigem().getNome());
-	                                    transferenciaController.registrarTransferencia(transferencia);
-	                                }
-	                            } else {
-	                                break;
-	                            }
-	                        }
-	                    } catch (Exception e) {
-	                        e.printStackTrace();
-	                        break;
-	                    }
+	                    
 	                }
 	                break;
 

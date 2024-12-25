@@ -64,5 +64,23 @@ public class PedidoDAOJPA implements IPedidoDAO{
 			entityManager.close();
 		}
 	}
+	
+	@Override
+	public PedidoDTO atualizar(PedidoDTO pedido) throws Exception {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			Pedido pedidoEncontrado = entityManager.find(Pedido.class, pedido.getId());
+			pedidoEncontrado = mapper.toEntity(pedido);
+			entityManager.merge(pedidoEncontrado);
+			entityManager.getTransaction().commit();
+			return pedido;
+		} catch (Exception e) {
+			entityManager.getTransaction().rollback();
+			throw e;
+		} finally {
+			entityManager.close();
+		}
+	}
 
 }

@@ -33,6 +33,16 @@ public class PedidoController {
 	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {
 		return pedidoDAO.buscarPedidoPorId(pedido);
 	}
+	
+	public void concluirPedido(PedidoDTO pedido) throws Exception {
+		pedido.setStatus(StatusPedido.CONCLUIDO);
+		pedidoDAO.atualizar(pedido);
+	}
+	
+	public void aguardarTransferencia(PedidoDTO pedido) throws Exception {
+		pedido.setStatus(StatusPedido.TRANSFERENCIA_EM_ANDAMENTO);
+		pedidoDAO.atualizar(pedido);
+	}
 
 	public IPedidoDAO getPedidoDAO() {
 		return pedidoDAO;
