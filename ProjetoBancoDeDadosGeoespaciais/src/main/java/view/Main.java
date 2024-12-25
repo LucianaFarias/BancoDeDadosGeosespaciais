@@ -85,7 +85,7 @@ public class Main {
 	            case 3:
 	                try {
 	                    for (EstoqueDTO estoque : estoqueController.listarEstoques()) {
-	                        System.out.println(estoque.getFilial().getNome() + " " +
+	                        System.out.println("ID da Filial: "+estoque.getFilial().getId()+" "+estoque.getFilial().getNome() + " " +
 	                                estoque.getProduto().getNome() + " " +
 	                                estoque.getQuantidade());
 	                    }
