@@ -11,12 +11,12 @@ import jakarta.persistence.TypedQuery;
 import mapper.MapperFilial;
 import model.Filial;
  
-public class FilialDAO implements IFilialDao {
+public class FilialDAOJPA implements IFilialDao {
 	
     private EntityManagerFactory entityManagerFactory;
 
-    public FilialDAO() {
-        this.entityManagerFactory = Conexao.getInstancia().getFactory();
+    public FilialDAOJPA() {
+        this.entityManagerFactory = ConexaoJPA.getInstancia().getFactory();
     }
 	
 	@Override
@@ -75,5 +75,10 @@ public class FilialDAO implements IFilialDao {
 
 		    return null;
 		}
+
+	@Override
+	public List<FilialDTO> buscarFiliaisProximas(FilialDTO filial) {
+		return null;
+	}
 
 }

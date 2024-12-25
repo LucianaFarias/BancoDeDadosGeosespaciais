@@ -11,15 +11,17 @@ public class PedidoDTO {
     private LocalizacaoDTO origemDoPedido;
     private FilialDTO filialResponsavel;
 	private StatusPedido status;
+	private ClienteDTO cliente;
 
     public PedidoDTO(int id, List<ItemPedidoDTO> itens, LocalizacaoDTO localDeEntrega,
-			LocalizacaoDTO origemDoPedido, FilialDTO filialResponsavel, StatusPedido status) {
+			LocalizacaoDTO origemDoPedido, FilialDTO filialResponsavel, StatusPedido status, ClienteDTO cliente) {
 		this.id = id;
 		this.itens = itens;
 		this.localDeEntrega = localDeEntrega;
 		this.origemDoPedido = origemDoPedido;
 		this.setFilialResponsavel(filialResponsavel);
 		this.status = status;
+		this.cliente = cliente;
 	}
 
 	public PedidoDTO() {
@@ -71,5 +73,13 @@ public class PedidoDTO {
 
 	public void setStatus(StatusPedido status) {
 		this.status = status;
+	}
+
+	public ClienteDTO getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(ClienteDTO cliente) {
+		this.cliente = cliente;
 	}
 }

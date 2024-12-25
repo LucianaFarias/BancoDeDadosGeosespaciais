@@ -3,15 +3,15 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DistanciaDAO;
-import dao.EstoqueDAO;
-import dao.FilialDAO;
-import dao.IDistanciaDAO;
+import dao.EstoqueDAOJPA;
+import dao.FilialDAOJDBC;
 import dao.IEstoqueDAO;
 import dao.IFilialDao;
-import dto.DistanciaDTO;
+import dao.IPedidoDAO;
+import dao.PedidoDAOJPA;
 import dto.EstoqueDTO;
 import dto.FilialDTO;
+import dto.ItemPedidoDTO;
 import dto.PedidoDTO;
 import dto.TransferenciaDTO;
 import exception.EstoqueInsuficienteException;
@@ -19,19 +19,47 @@ import mapper.MapperEstoque;
 import mapper.MapperPedido;
 import model.Estoque;
 import model.Pedido;
+import model.StatusPedido;
 
 public class EstoqueController {
 	
 	private IEstoqueDAO estoqueDAO;
 	private IFilialDao filialDAO;
-	private IDistanciaDAO distanciaDAO;
 	private MapperEstoque mapperEstoque;
+	private IPedidoDAO pedidoDAO;
 	
 	public EstoqueController() {
-		this.estoqueDAO = new EstoqueDAO();
-		this.filialDAO = new FilialDAO();
-		this.setDistanciaDAO(new DistanciaDAO());
+		this.estoqueDAO = new EstoqueDAOJPA();
+		this.filialDAO = new FilialDAOJDBC();
 		this.mapperEstoque = new MapperEstoque();
+		this.setPedidoDAO(new PedidoDAOJPA());
+	}
+	
+	public void transferir(TransferenciaDTO transferencia) throws Exception {
+		List<EstoqueDTO> estoques = estoqueDAO.buscarEstoquesDoProduto(transferencia.getProduto());
+		EstoqueDTO estoqueOrigem = filtrarEstoquesDaFilial(estoques, transferencia.getOrigem()).get(0);
+		EstoqueDTO estoqueDestino = filtrarEstoquesDaFilial(estoques, transferencia.getDestino()).get(0);
+		
+		Estoque entityOrigem = mapperEstoque.toEntity(estoqueOrigem);
+		entityOrigem.remover(transferencia.getQuantidade());
+		atualizarEstoque(mapperEstoque.toDTO(entityOrigem));
+		
+		estoqueDestino.setQuantidade(estoqueDestino.getQuantidade() + transferencia.getQuantidade());
+		atualizarEstoque(estoqueDestino);
+	}
+	
+	public void atenderPedido(PedidoDTO pedido) throws Exception {
+		if(pedido.getStatus() != StatusPedido.CONCLUIDO) {
+			
+			for(ItemPedidoDTO item: pedido.getItens()) {
+				List<EstoqueDTO> estoques = estoqueDAO.buscarEstoquesDoProduto(item.getProduto());
+				estoques = filtrarEstoquesDaFilial(estoques, pedido.getFilialResponsavel());
+				Estoque estoqueEntity = mapperEstoque.toEntity(estoques.get(0));
+				estoqueEntity.remover(item.getQuantidade());
+				atualizarEstoque(mapperEstoque.toDTO(estoqueEntity));
+			}
+		}
+		
 	}
 
 	public List<TransferenciaDTO> necessitaTransferenciaDeEstoque(FilialDTO filial, PedidoDTO pedido) throws Exception {
@@ -62,6 +90,8 @@ public class EstoqueController {
 
 			}
 			if(!estoquesQueFaltam.isEmpty()) {
+				pedido.setStatus(StatusPedido.ESTOQUE_INDISPONIVEL);
+				pedidoDAO.atualizar(pedido);
 				throw new EstoqueInsuficienteException("Não há estoque suficiente nas filiais");
 			}
 			
@@ -137,21 +167,7 @@ public class EstoqueController {
 	
 	public List<FilialDTO> buscarFiliaisMaisProximas(FilialDTO filial) throws Exception{
 		
-		List<DistanciaDTO> distancias = distanciaDAO.buscarDistanciasDaFilial(filial);
-		
-		List<FilialDTO> filiaisProximasDaInicial = new ArrayList<>();
-		for(DistanciaDTO distancia: distancias) {
-			
-			if(distancia.getFilial1().getId() == filial.getId()) { 
-				
-				filiaisProximasDaInicial.add(distancia.getFilial2());
-				
-			}else if(distancia.getFilial2().getId() == filial.getId()) {
-				
-				filiaisProximasDaInicial.add(distancia.getFilial1());
-
-			}
-		}
+		List<FilialDTO> filiaisProximasDaInicial = filialDAO.buscarFiliaisProximas(filial);
 		return filiaisProximasDaInicial;
 	}
 	
@@ -187,11 +203,12 @@ public class EstoqueController {
 		this.mapperEstoque = mapperEstoque;
 	}
 
-	public IDistanciaDAO getDistanciaDAO() {
-		return distanciaDAO;
+	public IPedidoDAO getPedidoDAO() {
+		return pedidoDAO;
 	}
 
-	public void setDistanciaDAO(IDistanciaDAO distanciaDAO) {
-		this.distanciaDAO = distanciaDAO;
+	public void setPedidoDAO(IPedidoDAO pedidoDAO) {
+		this.pedidoDAO = pedidoDAO;
 	}
+
 }

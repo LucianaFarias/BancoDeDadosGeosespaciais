@@ -13,4 +13,6 @@ public interface ITransferenciaDAO {
 	public void excluirTransferencia(TransferenciaDTO dto) throws Exception;
 	public List<TransferenciaDTO> buscarTransferenciasPorFilial(FilialDTO dto) throws Exception;
 	public List<TransferenciaDTO> listarTransferenciasPorOrigem(FilialDTO dto) throws Exception;
+    public TransferenciaDTO buscarTransferenciaPorId(TransferenciaDTO dto) throws Exception;
+
 }

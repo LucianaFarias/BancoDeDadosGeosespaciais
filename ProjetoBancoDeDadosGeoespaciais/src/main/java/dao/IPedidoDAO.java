@@ -8,6 +8,7 @@ public interface IPedidoDAO {
 	
 	public List<PedidoDTO> listarPedidos() throws Exception;
 	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception;
+	public PedidoDTO atualizar(PedidoDTO pedido) throws Exception;
 
 
 }

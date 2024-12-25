@@ -3,9 +3,11 @@ package mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import dto.ClienteDTO;
 import dto.ItemPedidoDTO;
 import dto.LocalizacaoDTO;
 import dto.PedidoDTO;
+import model.Cliente;
 import model.ItemPedido;
 import model.Localizacao;
 import model.Pedido;
@@ -36,13 +38,20 @@ public class MapperPedido {
         if(pedido.getLocalDeEntrega() != null) {
         	destino = mapperLocalizacao.toDTO(pedido.getLocalDeEntrega());
         }
+        
+        ClienteDTO cliente = new ClienteDTO();
+        if(pedido.getCliente() != null) {
+        	MapperCliente mapperCliente = new MapperCliente();
+        	cliente = mapperCliente.toDTO(pedido.getCliente());
+        }
 
         return new PedidoDTO(pedido.getId(),
         		itensPedidoDTO,
         		destino,
         		origem,
         		MapperFilial.toDTO(pedido.getFilialResponsavel()),
-        		pedido.getStatus());
+        		pedido.getStatus(),
+        		cliente);
     }
 
     public Pedido toEntity(PedidoDTO pedidoDTO) {
@@ -63,12 +72,18 @@ public class MapperPedido {
         	destino = mapperLocalizacao.toEntity(pedidoDTO.getLocalDeEntrega());
         }
         
+        Cliente cliente = new Cliente();
+        if(pedidoDTO.getCliente() != null) {
+        	MapperCliente mapperCliente = new MapperCliente();
+        	cliente = mapperCliente.toEntity(pedidoDTO.getCliente());
+        }
+        
         return new Pedido(pedidoDTO.getId(),
         		itensPedido,
         		destino,
         		origem,
         		MapperFilial.toEntity(pedidoDTO.getFilialResponsavel()),
-        		null,
+        		cliente,
         		pedidoDTO.getStatus());
     }
 

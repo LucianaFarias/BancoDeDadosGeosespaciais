@@ -12,13 +12,13 @@ import jakarta.persistence.TypedQuery;
 import mapper.MapperEstoque;
 import model.Estoque;
 
-public class EstoqueDAO implements IEstoqueDAO{
+public class EstoqueDAOJPA implements IEstoqueDAO{
 
 	private EntityManagerFactory factory;
 	private MapperEstoque mapper;
 	
-	public EstoqueDAO() {
-		this.factory = Conexao.getInstancia().getFactory();
+	public EstoqueDAOJPA() {
+		this.factory = ConexaoJPA.getInstancia().getFactory();
 		this.mapper = new MapperEstoque();
 	}
 

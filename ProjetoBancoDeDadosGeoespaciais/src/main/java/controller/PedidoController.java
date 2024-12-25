@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.IPedidoDAO;
-import dao.PedidoDAO;
+import dao.PedidoDAOJPA;
 import dto.PedidoDTO;
 import model.StatusPedido;
 
@@ -13,7 +13,7 @@ public class PedidoController {
 	private IPedidoDAO pedidoDAO;
 	
 	public PedidoController() {
-		this.setPedidoDAO(new PedidoDAO());
+		this.setPedidoDAO(new PedidoDAOJPA());
 	}
 	
 	public List<PedidoDTO> listarPedidos() throws Exception{
@@ -32,6 +32,16 @@ public class PedidoController {
 	
 	public PedidoDTO buscarPedidoPorId(PedidoDTO pedido) throws Exception {
 		return pedidoDAO.buscarPedidoPorId(pedido);
+	}
+	
+	public void concluirPedido(PedidoDTO pedido) throws Exception {
+		pedido.setStatus(StatusPedido.CONCLUIDO);
+		pedidoDAO.atualizar(pedido);
+	}
+	
+	public void aguardarTransferencia(PedidoDTO pedido) throws Exception {
+		pedido.setStatus(StatusPedido.TRANSFERENCIA_EM_ANDAMENTO);
+		pedidoDAO.atualizar(pedido);
 	}
 
 	public IPedidoDAO getPedidoDAO() {
