@@ -16,7 +16,7 @@ import dto.TransferenciaDTO;
 import exception.EstoqueInsuficienteException;
 import model.BuscaCoordenadas;
 
-public class Teste {
+public class Main {
 	public static void main(String[] args) {
 
 	    Scanner scanner = new Scanner(System.in);
@@ -127,6 +127,8 @@ public class Teste {
 										try {
 											estoqueController.atenderPedido(pedido);
 											controllerPedido.concluirPedido(pedido);
+											System.out.println("Pedido concluído com sucesso!");
+
 										} catch (Exception e) {
 											System.out.println("Erro ao carregar os dados");
 											e.printStackTrace();
@@ -144,6 +146,8 @@ public class Teste {
 											System.out.println(transferencia.getQuantidade() + " " + transferencia.getProduto().getNome() + " vindo de " + transferencia.getOrigem().getNome());
 											transferenciaController.registrarTransferencia(transferencia);
 											controllerPedido.aguardarTransferencia(pedido);
+											System.out.println("Transferências solicitadas com sucesso!");
+
 										}
 									
 									} else {
@@ -209,6 +213,8 @@ public class Teste {
 	                transferenciaChegada.setId(idTransferenciaChegada);
 
 	                try {
+	                	transferenciaChegada = transferenciaController.buscarTransferenciaPorId(transferenciaChegada);
+	                	estoqueController.transferir(transferenciaChegada);
 	                    transferenciaController.registrarChegadaEstoque(transferenciaChegada);
 	                    System.out.println("Transferência registrada como concluída.");
 	                } catch (Exception e) {
@@ -225,6 +231,7 @@ public class Teste {
 	            	transferenciaExcluir.setId(idTransferenciaExcluir);
 
 	            	try {
+	            		transferenciaExcluir = transferenciaController.buscarTransferenciaPorId(transferenciaExcluir);
 	            		transferenciaController.excluirTransferencia(transferenciaExcluir);
 	            		System.out.println("Transferência excluída com sucesso.");
 	            	} catch (Exception e) {

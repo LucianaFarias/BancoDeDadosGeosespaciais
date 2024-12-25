@@ -136,6 +136,23 @@ public class TransferenciaDAOJPA implements ITransferenciaDAO {
         }
         return transferenciasDTO;
     }
+    
+    public TransferenciaDTO buscarTransferenciaPorId(TransferenciaDTO dto) throws Exception {
+        EntityManager em = factory.createEntityManager();
+        TransferenciaDTO transferenciasDTO = new TransferenciaDTO();
+        try {
+        	em.getTransaction().begin();
+        	Transferencia transferencia = em.find(Transferencia.class, dto.getId());
+            MapperTransferencia mapper = new MapperTransferencia();
+            dto = mapper.toDTO(transferencia);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            em.close();
+        }
+        return dto;
+    }
 
     public List<TransferenciaDTO> listarTransferenciasPorOrigem(FilialDTO origem) throws Exception {
         List<TransferenciaDTO> transferencias = buscarTransferenciasPorFilial(origem);

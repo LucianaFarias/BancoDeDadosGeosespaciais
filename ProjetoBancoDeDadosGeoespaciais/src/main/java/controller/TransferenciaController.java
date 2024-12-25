@@ -30,6 +30,10 @@ public class TransferenciaController {
     public List<TransferenciaDTO> listarTransferenciasPorFilial(FilialDTO filial) throws Exception {
         return dao.buscarTransferenciasPorFilial(filial);
     }
+    
+    public TransferenciaDTO buscarTransferenciaPorId(TransferenciaDTO dto) throws Exception {
+        return dao.buscarTransferenciaPorId(dto);
+    } 
 
     public void gerarRelatorioTransferenciasPorOrigem(FilialDTO origem) throws Exception {
         List<TransferenciaDTO> transferencias = dao.listarTransferenciasPorOrigem(origem);

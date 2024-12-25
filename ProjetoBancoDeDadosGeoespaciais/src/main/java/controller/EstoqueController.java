@@ -35,6 +35,19 @@ public class EstoqueController {
 		this.setPedidoDAO(new PedidoDAOJPA());
 	}
 	
+	public void transferir(TransferenciaDTO transferencia) throws Exception {
+		List<EstoqueDTO> estoques = estoqueDAO.buscarEstoquesDoProduto(transferencia.getProduto());
+		EstoqueDTO estoqueOrigem = filtrarEstoquesDaFilial(estoques, transferencia.getOrigem()).get(0);
+		EstoqueDTO estoqueDestino = filtrarEstoquesDaFilial(estoques, transferencia.getDestino()).get(0);
+		
+		Estoque entityOrigem = mapperEstoque.toEntity(estoqueOrigem);
+		entityOrigem.remover(transferencia.getQuantidade());
+		atualizarEstoque(mapperEstoque.toDTO(entityOrigem));
+		
+		estoqueDestino.setQuantidade(estoqueDestino.getQuantidade() + transferencia.getQuantidade());
+		atualizarEstoque(estoqueDestino);
+	}
+	
 	public void atenderPedido(PedidoDTO pedido) throws Exception {
 		if(pedido.getStatus() != StatusPedido.CONCLUIDO) {
 			

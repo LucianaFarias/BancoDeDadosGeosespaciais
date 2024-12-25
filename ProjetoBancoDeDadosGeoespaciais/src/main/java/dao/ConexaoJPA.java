@@ -17,6 +17,8 @@ public class ConexaoJPA {
     public static ConexaoJPA getInstancia() {
     	if(INSTANCIA == null) {
     		INSTANCIA = new ConexaoJPA();
+    	}else if(!INSTANCIA.factory.isOpen()) {
+            INSTANCIA = new ConexaoJPA();
     	}
         return INSTANCIA;
     }

@@ -15,8 +15,7 @@ public class ConexaoJDBC {
     private ConexaoJDBC() {
         try {
         	// Defina o caminho do seu banco SQLite
-            String url = "jdbc:sqlite:C:\\Users\\Carina\\Documents\\ADS\\bd2\\banco-geoespacial\\projeto\\loja.sqlite";
-            System.out.println("Conexão com o banco de dados estabelecida com sucesso.");
+            String url = "jdbc:sqlite:caminho do arquivo";
            
             SQLiteConfig config = new SQLiteConfig();
             config.enableLoadExtension(true);
@@ -35,8 +34,10 @@ public class ConexaoJDBC {
         }
     }
 
-    public static ConexaoJDBC getInstancia() {
+    public static ConexaoJDBC getInstancia() throws SQLException {
         if (INSTANCIA == null) {
+            INSTANCIA = new ConexaoJDBC();
+        }else if(INSTANCIA.connection.isClosed()) {
             INSTANCIA = new ConexaoJDBC();
         }
         return INSTANCIA;
@@ -46,7 +47,6 @@ public class ConexaoJDBC {
         if (connection != null) {
             try {
                 connection.close();
-                System.out.println("Conexão fechada com sucesso.");
             } catch (SQLException e) {
                 System.err.println("Erro ao fechar a conexão: " + e.getMessage());
             }
